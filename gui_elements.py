@@ -38,6 +38,7 @@ from tkinter import ttk
 #from tkinter import font
 #from tkinter import scrolledtext
 from utils import *
+
 import logging
 
 # class RedirectText: # obsolet redirect sdt out to widget (useing logger instead)
@@ -136,6 +137,8 @@ class Range:
         self.start_range_label['textvariable'] = self.start_range
         self.start_range.set(start_range)
 
+        self.start_range_full=start_range
+
         self.equity_freq_label=ttk.Label(self.title_frame, text="FREQ:    EQ:")
         self.equity_freq_label.grid(column=3, row=0, sticky=W)
 
@@ -178,10 +181,14 @@ class Range:
         return self.sub_range_list[index].get_xbox()
 
     def set_start_range(self, range_string):
-        self.start_range.set(range_string)
-
+        self.start_range_full=range_string
+        if len(range_string) > START_RANGE_WIDTH:
+            self.start_range.set(range_string[:START_RANGE_WIDTH-4]+"...")
+        else:
+            self.start_range.set(range_string)
+            
     def get_start_range(self):
-        return self.start_range.get()
+        return self.start_range_full
     
     def set_freq(self, index, value):
         if index >= len(self.sub_range_list):
@@ -231,16 +238,10 @@ class Range:
             if self.get_xbox(i):
                 if self.get_range(i,False):
                     selected_range=selected_range+","+self.get_range(i,False)
-                    
         if selected_range:
-            selected_range=self.add_parenthesis(selected_range[1:])
-
-        start_range=self.add_parenthesis(self.start_range.get())
-
-        if selected_range:
-            return start_range + ":" + selected_range 
+            return self.add_parenthesis(self.get_start_range()) + ":" +self.add_parenthesis(selected_range[1:])
         else:
-            return start_range 
+            return self.get_start_range() 
 
     def get_range(self, index, ignore_selection=True, start_range=False): # remove ranges listed above index
                                                                           # ignore_selection == False -> Doesnt exclude selected ranges
@@ -259,17 +260,17 @@ class Range:
             exclude_range=self.add_parenthesis(exclude_range[:-1])
             if include_range:
                 if start_range:
-                    return self.add_parenthesis(self.start_range.get()) + ":" + self.add_parenthesis(include_range + "!" + exclude_range)
+                    return self.add_parenthesis(self.get_start_range()) + ":" + self.add_parenthesis(include_range + "!" + exclude_range)
                 else:
-                    return include_range + "!" + exclude_range
+                    return include_range  + "!" + exclude_range
             else:
                 return "" # "*" + "!" + exclude_range
         else:
             if include_range:
                 if start_range:
-                    return self.add_parenthesis(self.start_range.get()) + ":" + include_range
+                    return self.add_parenthesis(self.get_start_range()) + ":" + include_range
                 else:
-                    return include_range
+                    return self.sub_range_list[index].get_range()
             else:
                 return ""
 

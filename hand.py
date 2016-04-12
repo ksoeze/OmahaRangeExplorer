@@ -18,8 +18,7 @@
 
 # Commentary: 
 # 
-# FIXME: Straight flush not included yet
-# FIXME: Hand board Intersections returns are not sorted...2Q instead of Q2...problem with compare?
+# Possible to remove additional redudant () in remove parenthesis
 # 
 
 # Change Log:
@@ -62,6 +61,7 @@ def parse_hand(hand,board_string):
     #     macro_file.close()
 
     hand = replace_strings(hand,board)
+    hand = remove_parentheses(hand)
     return hand
 
 def replace_strings(hand,board):
@@ -80,6 +80,7 @@ def replace_strings(hand,board):
     flush_suit=[]
     if flushes:
         flush_suit= flush_suit + [flushes[0][1:]]
+    str_flush=return_str_flush(board)
 
     match_expr=re.compile('['+''.join(RANKS)+']'+'{3,4}'+'\+') #start with longest possible expressions == 3, 4 card wraps
     hand_sections=match_expr.findall(hand)
@@ -123,21 +124,21 @@ def replace_strings(hand,board):
             compare_x=''.join(sorted(x[:-1], key=lambda x:RANK_ORDER[x], reverse=True))
             
             if compare_x in fulls_or_better:
-                replace_hands=fulls_or_better[0:fulls_or_better.index(compare_x)+1]
+                replace_hands=str_flush+fulls_or_better[0:fulls_or_better.index(compare_x)+1]
                 hand=hand.replace(x,range_string(replace_hands))
             elif compare_x in straights:
-                replace_hands=fulls_or_better+flush_suit+straights[0:straights(compare_x)+1]
+                replace_hands=str_flush+fulls_or_better+flush_suit+straights[0:straights.index(compare_x)+1]
                 hand=hand.replace(x,range_string(replace_hands))
             elif compare_x in str_draws:
                 replace_hands=str_draws[0:str_draws.index(compare_x)+1]
                 hand=hand.replace(x,range_string(replace_hands))
             elif compare_x in hand_board_int:
-                replace_hands=flush_suit+straights+hand_board_int[0:hand_board_int.index(compare_x)+1]
+                replace_hands=str_flush+fulls_or_better+flush_suit+straights+hand_board_int[0:hand_board_int.index(compare_x)+1]
                 hand=hand.replace(x,range_string(replace_hands))
             elif x[1] in hand_board_int: # pair + kicker? 
                 replace_hands=hand_board_int[0:hand_board_int.index(x[1])]
                 better_kickers=kickers[0:kickers.index(x[0])+1]
-                replace_hands=flush_suit+straights+replace_hands+[k+x[1] for k in better_kickers]
+                replace_hands=str_flush+fulls_or_better+flush_suit+straights+replace_hands+[k+x[1] for k in better_kickers]
                 hand=hand.replace(x,range_string(replace_hands))               
 
     match_expr=re.compile('['+''.join(RANKS)+']'+'{1}'+'\+') #one pair or better   
@@ -147,7 +148,7 @@ def replace_strings(hand,board):
         for x in hand_sections:
             compare_x=x[:-1]
             if compare_x in hand_board_int:
-                replace_hands=hand_board_int[0:hand_board_int.index(compare_x)+1]
+                replace_hands=str_flush+fulls_or_better+flush_suit+straights+hand_board_int[0:hand_board_int.index(compare_x)+1]
                 hand=hand.replace(x,range_string(replace_hands))
 
     if '+' in hand:
@@ -172,22 +173,70 @@ def range_string(hand_range):
     
     return hand_string
 
-# def find_ppt_hand(string,board):
-#     """
-#      takes string before a + sign in order to expand it and returns full range as list
-#     """
-#     hand= INVALID_CHAR*5+string # in order to not index empty string 
-#     ranks=return_ranks(board)
-#     suits=return_suits(board)
+def remove_parentheses(range_string):
+    start_index=0
+    index_touple_list=[]
     
-#     if hand[-1] == INVALID_CHAR: return []
+    for char in range_string: # find index of matching parenthesis and save as touple list
+        if char != '(':
+            start_index+=1
+            continue # find first (
+        sub_string=range_string[start_index+1:]
+        # print(sub_string)
+        end_index=start_index+1
+        counter=0
+        for char_sub in sub_string:
+            # print("Index= {0} Counter= {1} Char= {2}".format(end_index,counter,char_sub))
+            if char_sub == ')' and counter==0 :
+                index_touple_list.append((start_index,end_index))
+                break # found closing )
+            elif char_sub == '(':
+                counter+=1
+                end_index+=1
+            elif char_sub == ')':
+                counter-=1
+                end_index+=1
+            else:
+                end_index+=1
+        start_index+=1
 
+    remove_index_list=[] # list of indizes to remove from string
+    for touple in index_touple_list:
+        if (touple[0] == 0) and (touple[1] == len(range_string)-1): # remove if they are at beginning and end
+            remove_index_list.append(touple[0])
+            remove_index_list.append(touple[1])
+        if (range_string[touple[0]+1] == '(') and (range_string[touple[1]-1] == ')'): # double parenthesis
+            if (touple[0]+1,touple[1]-1) in index_touple_list: # check if inner parenthesis are matching -> redundent
+                remove_index_list.append(touple[0])
+                remove_index_list.append(touple[1])
+        if touple[1] - touple[0] == 1: # empty parenthesis
+            remove_index_list.append(touple[0])
+            remove_index_list.append(touple[1])
+        # if touple[0] == 0: # start string
+        #     if touple[1] == len(range_string)-1: # remove if they are at beginning and end
+        #         remove_index_list.append(touple[0])
+        #         remove_index_list.append(touple[1])
+        #     elif range_string[touple[1]+1] == ",": # remove if first is on position 0 and second follows, 
+        #         remove_index_list.append(touple[0])
+        #         remove_index_list.append(touple[1])
+                
+        # possible to add additional stuff here (remove if there are only , before after etc) FIXME?
+
+#    print(index_touple_list)
+    return_string=''
+    for index in range(len(range_string)): # deleting parenthesis
+        if index not in remove_index_list:
+            return_string+=range_string[index]       
+    return return_string
+    
 def test():
-    hand_string="$4B2:(A4+,Jss+)"
-    board_string="Kh2s3s"
+    hand_string="$4B2:(Jss+,K6+)"
+    board_string="Ks3s3s6h7d"
     sample_board=parse_board(board_string)
-    print(hand_string)
-    print(parse_hand(hand_string,board_string))
+    #print(hand_string)
+    #print(parse_hand(hand_string,board_string))
+    print("50%:(((A,4,5):(34,ss)))()")
+    print(remove_parentheses("50%:(((A,4,5):(34,ss)))()"))
 
 if __name__ == '__main__':
     import timeit

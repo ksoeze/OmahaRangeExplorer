@@ -30,13 +30,14 @@ TEST_QUERY=("select avg(equity(hero, turn)) as EQUITY \n"
     "villain='KdQsTcJd', \n" 
     "board='Kc8s5s' \n")
 
-PPT_TRIAL=300000 # omaha ranger: 300000 and 50000 for evaluation
+PPT_TRIAL=100000 # omaha ranger: 300000 and 50000 for evaluation
 PPT_MAX_SEC=10
 PPT_THREAD_CNT=8
 PPT_LOCATION="/home/johann/usr/PPTOddsOracle/ui_jar/"
 PPT_NUM_DIGETS=4 # whole length including decimal point (minimal length = 0.00)
 PPT_GAME="omahahi" # std game
 PPT_SYNTAX='Generic'
+
 
 
 # gui constants
@@ -58,3 +59,4 @@ TITLE="OMAHA RANGE CRUSHER"
 MAIN_GEOMETRY="2200x2000"
 TEXT_OUTPUT_HEIGHT=60
 TEXT_OUTPUT_WIDTH=150
+DOTS="-----------------------------------------------------------"

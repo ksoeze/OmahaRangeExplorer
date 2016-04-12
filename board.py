@@ -18,7 +18,7 @@
 
 # Commentary: 
 # 
-# FIXME Straight Draws not correct yet (missing idiot gs)
+# Ignores 2nd 2 pair on paired board: Q5 is not in list on AQ544 board 
 # 
 # 
 
@@ -122,37 +122,41 @@ def rank_count(ranks):
         i.sort(key=lambda x:RANK_ORDER[x],reverse=True)
     return rank_count
 
-def hand_board_intersections(ranks):
+def hand_board_intersections(ranks): # not including full + 
     rank_count_list=rank_count(ranks)
     if len(rank_count_list[0]) == len(ranks):
         sets=[str(r)*2 for r in ranks]
         two_pair=[''.join(r) for r in combinations(ranks,2)]
         return sets + two_pair + ranks
-    if rank_count_list[3]:
-        return rank_count_list[3]
+    #if rank_count_list[3]:
+    #    return rank_count_list[3]
     if rank_count_list[2]:
-        quads=[rank_count_list[2][0]]
+        # quads=[rank_count_list[2][0]]
         trips=[]
         if rank_count_list[1]:
-            quads.append(rank_count_list[1][0]*2)
+          #  quads.append(rank_count_list[1][0]*2)
             if RANK_ORDER[rank_count_list[1][0]] > RANK_ORDER[rank_count_list[2][0]]:
                 trips.append(rank_count_list[1][0])
         else:
             trips=[x*2 for x in rank_count_list[0] if RANK_ORDER[x] > RANK_ORDER[rank_count_list[2][0]]]
-        return sorted(quads, key=lambda x:RANK_ORDER[x[0]], reverse=True) + trips
+        return trips # sorted(quads, key=lambda x:RANK_ORDER[x[0]], reverse=True) + trips
     if rank_count_list[1]:
-        quads=[r*2 for r in rank_count_list[1]]
-        fulls=[''.join(r+r) for r in rank_count_list[0]]
-        fulls=fulls+[x+y for x in rank_count_list[0] for y in rank_count_list[1]]
-        if len(rank_count_list[1])==2:
-            fulls=fulls+[''.join(rank_count_list[1][0])+''.join(rank_count_list[1][1])]
-        fulls=sort_fulls(ranks,fulls)
+        # quads=[r*2 for r in rank_count_list[1]]
+        # fulls=[''.join(r+r) for r in rank_count_list[0]]
+        # fulls=fulls+[x+y for x in rank_count_list[0] for y in rank_count_list[1]]
+        # if len(rank_count_list[1])==2:
+        #     fulls=fulls+[''.join(rank_count_list[1][0])+''.join(rank_count_list[1][1])]
+        # fulls=sort_fulls(ranks,fulls)
         trips=rank_count_list[1]
+        two_pair=[]
+        possible_2_pair_ranks=[rank for rank in rank_count_list[0] if RANK_ORDER[rank] > RANK_ORDER[rank_count_list[1][0]]]
+        if len(possible_2_pair_ranks) >= 2: 
+            two_pair=[''.join(possible_2_pair_ranks[0] + r) for r in possible_2_pair_ranks[1:]]
         pairs=rank_count_list[0]
-        return quads+fulls+trips+pairs
+        return trips+two_pair+pairs # quads+fulls+trips+two_pair+pairs
     return []
 
-def return_fulls_or_better(ranks): # copy from hand_board_intersections...FIXME
+def return_fulls_or_better(ranks):
     rank_count_list=rank_count(ranks)
     if rank_count_list[3]:
         return rank_count_list[3]
@@ -170,20 +174,38 @@ def return_fulls_or_better(ranks): # copy from hand_board_intersections...FIXME
         fulls=sort_fulls(ranks,fulls)
         return quads+fulls
     return []   
+
+def return_str_flush(board):
+    ranks=return_ranks(board)
+    straights=return_straights(ranks)
+    flush_suit=[s for c,s in return_suits(board) if c>2]
+    str_flush=[]
+    
+    if not (straights and flush_suit):
+        return []
+
+    for straight in STRAIGHTS:
+        str_flush_cards=[c for c in straight if c+flush_suit[0] not in board]
+        if len(str_flush_cards)==2:
+            str_flush.append(str_flush_cards[0]+flush_suit[0]+str_flush_cards[1]+flush_suit[0])
+    return str_flush
     
 def return_straights(ranks):
     ranks=straight_ranks(ranks)
     straights=[]
     for s in STRAIGHTS:
+        straight_combo=[]
         for r in combinations(ranks,3):
             stra=''.join([x for x in s if x not in r])
             if len(stra)==2 and stra not in straights:
-                straights.append(''.join(sorted(stra, key=lambda x:RANK_ORDER[x], reverse=True)))
+                straight_combo.append(''.join(sorted(stra, key=lambda x:RANK_ORDER[x], reverse=True)))
+        straight_combo.sort(key=lambda x:(RANK_ORDER[x[0]],RANK_ORDER[x[1]]),reverse=True)
+        straights+=straight_combo
     return straights
 
 def straight_ranks(ranks):
     ranks=rank_count(ranks)
-    return ranks[0]+ranks[1]+ranks[2]   
+    return ranks[0]+ranks[1]+ranks[2]
 
 def return_straight_draws(ranks):
     if len(ranks)==5: return []
@@ -193,39 +215,46 @@ def return_straight_draws(ranks):
     any_4_card_straight_combo=[combo1+combo2 for combo1 in gs_or_oesd for combo2 in gs_or_oesd]
     any_4_card_straight_combo=[''.join(sorted(set(hand), key=lambda x:RANK_ORDER[x], reverse=True)) for hand in any_4_card_straight_combo]
     any_4_card_straight_combo=list(set(any_4_card_straight_combo))
+
+    def is_straight(hand, straight_hands):
+        for straight in straight_hands:
+            if (straight[0] in hand) and (straight[1] in hand):
+                return True
+        return False    
     
+    any_4_card_straight_combo = [draw for draw in any_4_card_straight_combo if not is_straight(draw, straight_hands)]
+
     hand_straight_outs={}
     hand_straight_nuttynes={}
-    
-    
+
+
     for hand in any_4_card_straight_combo:
         hand_straight_outs[hand]=[]
         hand_straight_nuttynes[hand]=[]        
         for hand_combo in combinations(hand, 2):
             combo=''.join(sorted(hand_combo, key=lambda x:RANK_ORDER[x], reverse=True))
-            if combo not in straight_hands: 
-                for r in RANKS:
-                    if combo in next_card_straight_hands[r]:
-                        if r not in hand_straight_outs[hand]:
-                            hand_straight_outs[hand].append(r)
-                            hand_straight_nuttynes[hand].append(next_card_straight_hands[r].index(combo))
+            for r in RANKS:
+                if combo in next_card_straight_hands[r]:
+                    if r not in hand_straight_outs[hand]:
+                        hand_straight_outs[hand].append(r)
+                        hand_straight_nuttynes[hand].append(next_card_straight_hands[r].index(combo))
 
-    any_4_card_straight_combo=sorted(any_4_card_straight_combo, key = lambda x: (len(hand_straight_outs[x]),(100-sum(hand_straight_nuttynes[x]))), reverse=True)
-
+    any_4_card_straight_combo=sorted(any_4_card_straight_combo, key = lambda x: (len(hand_straight_outs[x]),(100-sum(hand_straight_nuttynes[x]),x)), reverse=True)                        
+                            
     for combo in combinations(any_4_card_straight_combo,2):
         if hand_straight_outs[combo[0]] == hand_straight_outs[combo[1]]:
             if len(combo[0]) > len(combo[1]):
-                if combo[0] in any_4_card_straight_combo:
+                if combo[1] in combo[0] and combo[0] in any_4_card_straight_combo:
                     any_4_card_straight_combo.remove(combo[0])
             else:
-                 if combo[1] in any_4_card_straight_combo:
+                if combo[0] in combo[1] and combo[1] in any_4_card_straight_combo:
                     any_4_card_straight_combo.remove(combo[1])
 
-    for straight in straight_hands:
-        for draw in any_4_card_straight_combo:
-            if straight in draw:
-                any_4_card_straight_combo.remove(draw)
-        
+    #print (next_card_straight_hands)
+    #for hand in any_4_card_straight_combo:
+    #    print ("Combo: {0} has number of outs: {1}, with nuttynes: {2}\n".format(hand, hand_straight_outs[hand], hand_straight_nuttynes[hand]))
+    
+    
     
     return any_4_card_straight_combo
     
@@ -238,13 +267,14 @@ def possible_straights_on_next_card(ranks):
     return next_card
         
 def sort_fulls(ranks,fulls):
+    sort_fulls=[]
     for i in fulls:
-        if i[0] == i[1]: continue
-        if ranks.count(i[0])==2: continue
+        if ranks.count(i[0])==2 or i[0] == i[1]:
+            sort_fulls.append(i)
         else:
-            fulls.remove(i)
-            fulls.append(i[1]+i[0])
-    return sorted(fulls, key=lambda x:(RANK_ORDER[x[0]],RANK_ORDER[x[1]]),reverse=True)
+            sort_fulls.append(i[1]+i[0])   
+    fulls=sorted(sort_fulls, key=lambda x:(RANK_ORDER[x[0]],RANK_ORDER[x[1]]),reverse=True)
+    return [''.join(sorted(full, key=lambda x:RANK_ORDER[x], reverse=True)) for full in fulls]
 
 def pairs(ranks):
     pairs=[]
@@ -255,23 +285,23 @@ def pairs(ranks):
 
 
 def test():
-    board_string="Ah6s9s"
+    board_string="Ks3s3s6h7d"
     sample_board=parse_board(board_string)
     ranks=return_ranks(sample_board)
     
-    print(sample_board)
-    print(return_ranks(sample_board))
-    print(return_suits(sample_board))
-    print(return_flushes(sample_board))
-    print(return_flushdraws(sample_board,'c'))
-    print(rank_count(return_ranks(sample_board)))
+  #  print(sample_board)
+  #  print(return_ranks(sample_board))
+  #  print(return_suits(sample_board))
+  #  print(return_flushes(sample_board))
+  #  print(return_flushdraws(sample_board,'c'))
+  #  print(rank_count(return_ranks(sample_board)))
     print(hand_board_intersections(return_ranks(sample_board)))
+    print(return_string(sample_board,"river"))
     print(return_straights(ranks))
     print(return_straight_draws(ranks))
-    print(pairs(ranks))
+    print(return_str_flush(sample_board))
+ #   print(pairs(ranks))
 
-    print("\n\n\n")
-    print(return_string(sample_board,"turn"))
 
 if __name__ == '__main__':
     import timeit

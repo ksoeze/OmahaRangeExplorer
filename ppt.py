@@ -62,13 +62,23 @@ class OddsOracleServer():
             logging.info("Try executing first sample again")
             self.run_query(TEST_QUERY)
             
+    def log_ppt_answer(self,answer):
+        if "ERROR" in answer:
+            logging.error(answer)
+        elif "EQUITY" in answer or "INRANGE" in answer:
+            logging.debug("PPT answer is: \n {}".format(answer))
+        else:
+            logging.warning("Unexpected PPT Answer...CHECK Result:\n".format(answer))
+        return
+
     def run_query(self, query):
         try:
             result = self.ppt_client.PPTServer.executePQL(query, self.trial, self.max_time, self.thread_cnt)
-            logging.info(result)
-            return result
         except:
             logging.error("No Connection to PPT Server")
+            return ""
+        self.log_ppt_answer(result)
+        return result
 
     def parse_ppt_answer(self, answer,keyword="EQUITY",num_digets=PPT_NUM_DIGETS):
         number=0.0
@@ -94,8 +104,11 @@ class OddsOracleServer():
                "villain='{3}', \n" 
                "board='{4}', \n"
                "dead='{5}'\n").format(self.game, self.syntax, hero_range, villain_range, self.board, self.dead)
-        logging.debug("Running the following query:")
-        logging.debug(query)
+        logging.debug("Running an Equity Query with:")
+        logging.debug("Game: {0}, Syntax: {1}, Board: {2}, Dead: {3}".format(self.game,self.syntax,self.board,self.dead))
+        logging.debug("Hero Range: {}".format(hero_range))
+        logging.debug("Villain Range: {}".format(villain_range))
+
         return (self.parse_ppt_answer(self.run_query(query),"EQUITY"))*100
     
     def in_range_query(self, hero_range, villain_range, sub_range):
@@ -110,8 +123,12 @@ class OddsOracleServer():
                "villain='{4}', \n" 
                "board='{5}', \n"
                "dead='{6}'\n").format(hero_range, sub_range, self.game, self.syntax, villain_range, self.board, self.dead)
-        logging.debug("Running the following query:")
-        logging.debug(query)
+        logging.debug("Running an InRange/Frequency Query with:")
+        logging.debug("Game: {0}, Syntax: {1}, Board: {2}, Dead: {3}".format(self.game,self.syntax,self.board,self.dead))
+        logging.debug("Hero Range: {}".format(hero_range))
+        logging.debug("Hero SubRange: {}".format(sub_range))       
+        logging.debug("Villain Range: {}".format(villain_range))
+        
         return self.parse_ppt_answer(self.run_query(query),"INRANGE")
 
     def format_range(self,hand_range):

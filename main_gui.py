@@ -18,13 +18,9 @@
 
 # Commentary: 
 # 
-# FIXME Range Expansion (+ Expressions) are currently wrong (flop K2+ on K2A3 includes K3 and A3 etc) 
+#
 # 
-# 
-
-# Change Log:
-# 
-# 
+#
 
 from tkinter import *
 from tkinter import ttk
@@ -35,7 +31,9 @@ from tkinter import messagebox
 from utils import *
 from gui_elements import *
 from ppt import OddsOracleServer
-from board import *
+from board import parse_board
+from board import return_string
+from hand import parse_hand
 #from hand import *
 
 from queue import Queue
@@ -54,16 +52,15 @@ def update_ranges():
     rb_p1_flop.set_start_range(rb_p1_pre.get_range())
     rb_p2_flop.set_start_range(rb_p2_pre.get_range())
 
-    rb_p1_turn.set_start_range(rb_p1_flop.get_selected_range())
-    rb_p2_turn.set_start_range(rb_p2_flop.get_selected_range())
+    rb_p1_turn.set_start_range(expand_range(rb_p1_flop.get_selected_range(),"flop"))
+    rb_p2_turn.set_start_range(expand_range(rb_p2_flop.get_selected_range(),"flop"))
 
-    rb_p1_river.set_start_range(rb_p1_turn.get_selected_range())
-    rb_p2_river.set_start_range(rb_p2_turn.get_selected_range())
+    rb_p1_river.set_start_range(expand_range(rb_p1_turn.get_selected_range(),"turn"))
+    rb_p2_river.set_start_range(expand_range(rb_p2_turn.get_selected_range(),"turn"))
 
     # set game dead etc
     ppt_client.game=gi_game.get()
     ppt_client.dead=gi_dead.get()
-    
     return
 
 def calc_ppt_set_value(range_1, range_2):
@@ -77,49 +74,85 @@ def calc_ppt_set_value(range_1, range_2):
     hero_subrange_2=range_1.get_range(2,start_range=True)
     hero_subrange_3=range_1.get_range(3,start_range=True)
 
-    disable_calc_buttons()
+    logging.info(DOTS)
+    logging.info("Start Calculation for Board: {0}".format(ppt_client.board))
+    logging.info("Game= {0}, Dead= {1}, Trials= {2}".format(ppt_client.game, ppt_client.dead, ppt_client.trial))
+    logging.info("Hero start range: {0}".format(hero_range))
+    logging.info("Villain start range: {0} \n".format(villain_range))
     
     if hero_range:
         equity=ppt_client.equity_query(hero_range,villain_range)
         range_1.set_range_equity(equity)
+        logging.info("Equity is {0:.1f} for hero overall range: {1} \n".format(equity,hero_range))
+    else: range_1.set_range_equity(0)
     if hero_subrange_0:
         frequency=ppt_client.in_range_query(hero_range,villain_range,hero_subrange_0)
         range_1.set_freq(0,frequency)
+        logging.info("Frequency is {0:.1f} for hero sub range 1: {1}".format(frequency,hero_subrange_0))
         equity=ppt_client.equity_query(hero_subrange_0,villain_selected_range)
         range_1.set_equity(0,equity)
+        logging.info("Equity is {0:.1f} for hero sub range 1: {1} \n".format(equity,hero_subrange_0))
+    else:
+        range_1.set_freq(0,0)
+        range_1.set_equity(0,0)
     if hero_subrange_1:
         frequency=ppt_client.in_range_query(hero_range,villain_range,hero_subrange_1)
+        logging.info("Frequency is {0:.1f} for hero sub range 2: {1}".format(frequency,hero_subrange_1))
         range_1.set_freq(1,frequency)
         equity=ppt_client.equity_query(hero_subrange_1,villain_selected_range)
+        logging.info("Equity is {0:.1f} for hero sub range 2: {1}\n".format(equity,hero_subrange_1))
         range_1.set_equity(1,equity)
+    else:
+        range_1.set_freq(1,0)
+        range_1.set_equity(1,0)        
     if hero_subrange_2:
         frequency=ppt_client.in_range_query(hero_range,villain_range,hero_subrange_2)
+        logging.info("Frequency is {0:.1f} for hero sub range 3: {1}".format(frequency,hero_subrange_2))
         range_1.set_freq(2,frequency)
         equity=ppt_client.equity_query(hero_subrange_2,villain_selected_range)
+        logging.info("Equity is {0:.1f} for hero sub range 3: {1}\n".format(equity,hero_subrange_2))
         range_1.set_equity(2,equity)
+    else:
+        range_1.set_freq(2,0)
+        range_1.set_equity(2,0)        
     if hero_subrange_3:
         frequency=ppt_client.in_range_query(hero_range,villain_range,hero_subrange_3)
+        logging.info("Frequency is {0:.1f} for hero sub range 4: {1}".format(frequency,hero_subrange_3))
         range_1.set_freq(3,frequency)
         equity=ppt_client.equity_query(hero_subrange_3,villain_selected_range)
+        logging.info("Equity is {0:.1f} for hero sub range 4: {1}\n".format(equity,hero_subrange_3))
         range_1.set_equity(3,equity)
+    else:
+        range_1.set_freq(3,0)
+        range_1.set_equity(3,0)       
     if hero_selected_range:
         frequency=ppt_client.in_range_query(hero_range,villain_range,hero_selected_range)
+        logging.info("Frequency is {0:.1f} for hero selected range: {1}".format(frequency,hero_selected_range))
         range_1.set_summary_freq(frequency)        
         equity=ppt_client.equity_query(hero_selected_range,villain_selected_range)
+        logging.info("Equity is {0:.1f} for hero selected range: {1}\n".format(equity,hero_selected_range))
         range_1.set_summary_equity(equity)
-        
-    enable_calc_buttons()
+    else:
+        range_1.set_summary_freq(0)
+        range_1.set_summary_equity(0)
+
+    logging.info("Finished Calculation: {0}".format(ppt_client.board))
+    logging.info(DOTS)
+
     
 def eval_range(range_1, range_2, street):
     # takes 2 Range elements and sets all frequency and equities for range_1 vs selected range 2
     update_ranges()
 
-    if parse_board(gi_board.get()): # ignore empty/non valid board
-        ppt_client.board=return_string(parse_board(gi_board.get()),street)
+    ppt_queue.put((set_ppt_board,street)) # set start board...push to ppt queue for right timing
+
+#    if parse_board(gi_board.get()): # ignore empty/non valid board
+#        ppt_client.board=return_string(parse_board(gi_board.get()),street)
     
     ppt_queue.put((calc_ppt_set_value,range_1,range_2))
-
     return
+
+
 
 def eval_player_1():
     eval_range(rb_p1_flop, rb_p2_flop, "flop")
@@ -147,11 +180,6 @@ def change_logging_status(checkbox_status):
         logger.setLevel(logging.INFO)
     return
 
-def disable_calc_buttons():
-    return
-def enable_calc_buttons():
-    return
-
 def ppt_task_consumer(queue):
     while True:
         function, *args = queue.get()
@@ -159,14 +187,22 @@ def ppt_task_consumer(queue):
             logging.info("KILL PPT Thread")
             break
         if args:
-            logging.debug("Trying to execute the following PPT task: {0} with arguments: {1}".format(function, args))
+            logging.debug("Trying to execute the following PPT task: {0}".format(function))
             function(*args)
             logging.debug("Finished PPT task")
         else:
-            logging.debug("Trying to execute the following PPT task: {0} with no arguments.".format(function))
+            logging.debug("Trying to execute the following PPT task: {0}.".format(function))
             function()
             logging.debug("Finished PPT task")
+
+def set_ppt_board(street):
+    if parse_board(gi_board.get()): # ignore empty/non valid board
+        ppt_client.board=return_string(parse_board(gi_board.get()),street)
         
+def expand_range(range_string, street):
+    board=return_string(parse_board(gi_board.get()),street) if parse_board(gi_board.get()) else []
+    return parse_hand(range_string,board)
+
 ###
 # MAIN CODE STARTS HERE (no seperate class / main function)
 ###
@@ -196,8 +232,8 @@ text_output.grid(column=0, row=0, sticky=(N,W,E,S))
 # sys.stdout = redir
 
 logger_widget_handler=ScrolledTextLogger(text_output)
-# formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-# logger_widget_handler.setFormatter(formatter)
+formatter = logging.Formatter('%(levelname)s - %(message)s')
+logger_widget_handler.setFormatter(formatter)
 logger = logging.getLogger()
 logger.addHandler(logger_widget_handler)
 logger.setLevel(logging.INFO)
