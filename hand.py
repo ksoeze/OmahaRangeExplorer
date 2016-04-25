@@ -21,14 +21,6 @@
 # Possible to remove additional redudant () in remove parenthesis
 # 
 
-# Change Log:
-# 
-# 
-# 
-# 
-
-# Code:
-
 from board import *
 import re
 import logging
@@ -230,11 +222,11 @@ def remove_parentheses(range_string):
     return return_string
     
 def test():
-    hand_string="$4B2:(Jss+,K6+)"
+    hand_string="$4B2:(Jss+,9K+)"
     board_string="Ks3s3s6h7d"
     sample_board=parse_board(board_string)
     #print(hand_string)
-    #print(parse_hand(hand_string,board_string))
+    print(parse_hand(hand_string,board_string))
     print("50%:(((A,4,5):(34,ss)))()")
     print(remove_parentheses("50%:(((A,4,5):(34,ss)))()"))
 

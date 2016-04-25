@@ -31,6 +31,8 @@ TEST_QUERY=("select avg(equity(hero, turn)) as EQUITY \n"
     "board='Kc8s5s' \n")
 
 PPT_TRIAL=100000 # omaha ranger: 300000 and 50000 for evaluation
+PPT_RANK_QUERY_TRIAL=10000
+PPT_IN_RANGE_TRIAL=50000
 PPT_MAX_SEC=10
 PPT_THREAD_CNT=8
 PPT_LOCATION="/home/johann/usr/PPTOddsOracle/ui_jar/"
@@ -38,7 +40,19 @@ PPT_NUM_DIGETS=4 # whole length including decimal point (minimal length = 0.00)
 PPT_GAME="omahahi" # std game
 PPT_SYNTAX='Generic'
 
+# ev calcs defaults
 
+STACKSIZE=97.0
+POTSIZE=6.5
+BETSIZE=4
+RAISESIZE=14
+RERAISESIZE=35
+STREET="flop"
+
+BET4_STACK=100
+BET4_OPEN=3
+BET4_3BET=10
+BET4_POT=14
 
 # gui constants
 
@@ -52,11 +66,76 @@ BUTTON_PADX=5
 FRAME_PADDING="3 3 3 3" # std padding for small frames
 RANGE_FRAME_PADDING="3 50 3 3"
 PLAYER_FRAME_PADDING="3 3 180 3"
+EV_PLAYER_FRAME_PADDING="10 10 3 3"
 GENERAL_SETTING_PADDING="10 10 10 10"
 FONT_SIZE=9 # std font size
 FONT_FAM='Helvetica'
+FONT_FAM_MONO='monospace'
 TITLE="OMAHA RANGE CRUSHER"
 MAIN_GEOMETRY="2200x2000"
 TEXT_OUTPUT_HEIGHT=60
-TEXT_OUTPUT_WIDTH=150
+TEXT_OUTPUT_WIDTH=140
 DOTS="-----------------------------------------------------------"
+
+BET_VS_1_INFO=("Hero subranges are ignored for EV calcs...only Hero Prerange + Hand and Villain Ranges\n"
+               "Enter at least valid ranges for:\n"
+               "Hero Pre, Villain Pre, Villain Subrange 1,2,4, Hero Hand\n"
+               "Villain Range 1 is his value raise range; Range 2: call; Range 3: bluffraise; Range 4: fold (enter *)\n"
+               "Selections are ignored for EV calcs...but freq and eq results next to ranges works as in range builder\n"
+               "Betsizes are not checked for validity...\n"
+               "For AI spots just enter bet or raise or reraisesize == stacksize")
+
+BET_VS_1_RESULT_STR=("Some guidelines:\n"
+                     "Perfect polarised range when betting pot:\n"
+                     "Value:Bluff flop ~ 1:2.37 \n"
+                     "Value:Bluff turn ~ 1:1.25\n"
+                     "Value:Bluff river ~ 2:1 \n"
+                     "Alpha is % a bluff has to work for EV = 0 with 0% equity\n"
+                     "1-Alpha is % a player should defend vs perfectly polarised range\n"
+                     "Realisation factors are hard to estimate...\n"
+                     "Would guess R_vs_raise < R_vs_range < R_vs_call against most players in many situations\n"
+                     "Nutty draws...fd/gs etc can often realise more than their equity\n"
+                     "Weak made hands often realise a lot less than their equity\n"
+                     "Arguments for bet: \n"
+                     "- dont get raised off equity often (low raise feq + low equity vs raise range)\n"
+                     "- equity vs call is not much lower than equity vs range\n"
+                     "- equity vs folding range is low\n"
+                     "Defend vs Raise asumes villain plays on range 1 and folds range 3"
+                     "...")
+
+BET_VS_2_INFO=("Hero subranges are ignored for EV calcs...only Hero Prerange + Hand and Villain Ranges\n"
+               "Enter at least valid ranges for:\n"
+               "Hero Pre, Villain1/2 Pre, Villain1 Subrange 1,2,4, Villain2 Subrange 1,2,4,  Hero Hand\n"
+               "Villain Range 1 is the value raise range; Range 2: call; Range 3: bluffraise; Range 4: fold (enter *)\n"
+               "Villain 2 acts after villain 1...Villain 2 ships range 1 4 value also when villain 1 calls/raises (unrealistic but 3 way ai are rare)\n"
+               "Selections are ignored for EV calcs...but freq and eq results next to ranges works as in range builder\n"
+               "(eq and freq are calculated vs selection of both other players)\n"
+               "Betsizes are not checked for validity...\n")
+
+BET_VS_2_RESULT_STR=("Some guidelines:\n"
+                     "\n"
+                     "\n"
+                     "\n"
+                     "\n"
+                     "\n"
+                     "\n"
+                     "\n"
+                     "\n"
+                     "\n"
+                     "\n"
+                     "\n"
+                     "\n"
+                     "\n"
+                     "\n"
+                     "...")
+BET4_INFO=("Enter Hand in question\n"
+           "If thinking about 4bet:\n"
+           "Enter your starting stack with V1; your open/dead amount; V1 3bet size; total potsize after 3bet\n"
+           "Takes V1 pre range as start (=3bet range); 5bet AA; call rest and stacks off if equity > pot odds vs AA\n"
+           "If thinking about call 4bet:\n"
+           "Enter your starting stack with V1; your 3bet size; total potsize after 3bet\n"
+           "Takes V1 pre range as start (=4bet range); asumes perfect play from us vs V1 on the flop\n"
+           "Betsizes are not checked for validity...\n")
+
+BET4_RESULT=("\n"
+             "...\n")

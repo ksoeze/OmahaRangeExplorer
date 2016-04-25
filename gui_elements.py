@@ -35,18 +35,9 @@
 
 from tkinter import *
 from tkinter import ttk
-#from tkinter import font
-#from tkinter import scrolledtext
 from utils import *
 
 import logging
-
-# class RedirectText: # obsolet redirect sdt out to widget (useing logger instead)
-#     def __init__(self, text_ctrl):
-#         self.output = text_ctrl
-#     def write(self, string):
-#         self.output.insert(END, string)
-#         self.output.see(END)
 
 class ScrolledTextLogger(logging.Handler):
     def __init__(self, widget):
@@ -67,7 +58,6 @@ class ScrolledTextLogger(logging.Handler):
         
 class RangeLine:
     def __init__(self, master,  x_box=True, text_field_length=INPUT_LENGTH, freq=True, equity=True):
-
         column=0 # counter number of already created items
         self.is_x_box=x_box
         self.is_freq=freq
@@ -241,8 +231,18 @@ class Range:
         if selected_range:
             return self.add_parenthesis(self.get_start_range()) + ":" +self.add_parenthesis(selected_range[1:])
         else:
-            return self.get_start_range() 
+            return self.get_start_range()
 
+    def get_certain_range(self, index=[]): # return ranges listed in index list (0-3) with start range; empty string if index list or ranges are empty
+        selected_range=""
+        for i in index:
+            if self.get_range(i):
+                selected_range+=","+self.get_range(i)
+        if selected_range:
+            return self.add_parenthesis(self.get_start_range()) + ":" +self.add_parenthesis(selected_range[1:])
+        else:
+            return ""
+        
     def get_range(self, index, ignore_selection=True, start_range=False): # remove ranges listed above index
                                                                           # ignore_selection == False -> Doesnt exclude selected ranges
         if index >= len(self.sub_range_list):
@@ -312,6 +312,19 @@ class RangePreflop:
             return self.include_range.get()
         else:
             return self.add_parenthesis(self.include_range.get()) + "!" + self.add_parenthesis(self.exclude_range.get())
+
+class EvCalcPlayer:
+    def __init__(self,master,player="Player", text_field_length=INPUT_LENGTH, pre_field_length=PRE_INPUT_LENTH):
+        self.preframe=ttk.Frame(master,padding=EV_PLAYER_FRAME_PADDING)
+        self.preframe.grid(column=0, row=0, sticky=(N, W, E, S))
+
+        self.playerframe=ttk.Frame(master,padding=EV_PLAYER_FRAME_PADDING)
+        self.playerframe.grid(column=0, row=1, sticky=(N, W, E, S))
+
+        self.pre=RangePreflop(self.preframe,player,pre_field_length)
+        self.post=Range(self.playerframe,"Range")
+
+        
         
 def test_button(flop_range):
     print("HURRAY")

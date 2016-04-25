@@ -78,9 +78,6 @@ def return_string(board,street="river"):
 
 def return_ranks(board=[]):
     ranks=[r for r,s in board if r in RANKS]
-#    ranks=['--23456789TJQKA'.index(r) for r in ranks]
-#    ranks.sort(reverse = True)
-#    ranks=['--23456789TJQKA'[r] for r in ranks]
     return sorted(ranks, key=lambda x:RANK_ORDER[x],reverse=True)
 
 def return_suits(board=[]):
@@ -249,13 +246,6 @@ def return_straight_draws(ranks):
             else:
                 if combo[0] in combo[1] and combo[1] in any_4_card_straight_combo:
                     any_4_card_straight_combo.remove(combo[1])
-
-    #print (next_card_straight_hands)
-    #for hand in any_4_card_straight_combo:
-    #    print ("Combo: {0} has number of outs: {1}, with nuttynes: {2}\n".format(hand, hand_straight_outs[hand], hand_straight_nuttynes[hand]))
-    
-    
-    
     return any_4_card_straight_combo
     
 
