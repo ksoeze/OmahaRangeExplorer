@@ -1,0 +1,226 @@
+* Boards 
+
+Representation
+
+List of known suits:
+KsQJs4c2h - [s,s,c,h]
+List of known ranks sortet from highest to lowes in numbers:
+14-2
+QhJsAhJs3c - [14,12,11,11,3]
+List of known ranks for straight card checking (A included als high and low):
+14-1
+QhJsAhJs3c - [14,12,11,11,3,1]
+List of known ranks for low checking (1 = A to max 8 = 8) low to higher
+QhJsAhJs3c - [1,3]
+
+save lists of all possible handcombinations in PPT syntax?
+lists sorted from highest value to lowes
+
+MADE HANDS:
+
+straight flush:
+ex: board 4s5s6s - [8s7s,7s3s,3s2s]
+quads: 
+ex: board KsKcKd3h [K]
+          KsKc4dQh [KK]
+full house: 
+ex: board KsKc4dQh [KQ,K4,QQ,44]
+          KsKcKd3h [AA,QQ,JJ,TT,99,88,77,66,55,44,33,22]
+flush (top 3 flushes and any flush):
+ex board KsTs8s4c3h [Ass,Qss,Jss,ss]
+
+straight:
+ex board 3h6c7s [54]
+         3h4s5c [76,62,2A]
+         7h8s9cJdQh [KT,QT,JT,T9,T8,T7,T6,65]
+set (trips are different):
+ex board 3h5cKs [KK,55,33]
+         KhKs3c []
+trips
+ex board 3h5cKs []
+         KhKs3c [K]
+         KsKh3c3d5h [K,3]
+
+2 pair (without pair in Hand on paired board)
+ex board 3h4c6dKsAh [AK,A6,A4,A3,K6,K4,K3,64,63,43]
+         KsKd3h5c [5,3]
+	 3h3c4sKhAd [AK,A4,A,K4,K,4]
+
+1 Pair (without pair in Hand)
+ex board 4h3sJdQh [Q,J,4,3]
+
+Pairs in hand...list of all possible pairs in hand without matching boardcard
+ex board  3h3c4sKhAd [QQ,JJ,TT,99,88,77,66,55,22]
++ maybe index of overpair, 1 overcard 2 overcards
+in this case :    None None 7
+
+Kicker ranks?!
+ex board Ks5hJdTh [A,Q,9,8,7,6,4,3,2]
+
+DRAWS:
+
+Flushdraw (ignore straight flush draws)
+ex board 4h5s6cQs [Ass,Kss,Jss,Tss,9ss,8ss,7ss,6ss,4ss,3ss]
+
+Straightdraws....
+
+find all 2 card combination for gs or oesd
++ array of their out card
+
+board KsJd6d8c
+oesd_gs: []
+oesd outs: []
+gs: []
+gs_outs: []
+
+write method to combine those 2 for wraps etc:
+results in one array of all straight draw hands rankt from higher outs to lower 
+outs and higher nuttiness to lower nuttiness
++ one array for index of different number of outs:
+index num outs [20,17,16,13,12,9,8,4]
+                 
+SUITS:
+- Flushing 3-5 of one suit
+- 2 Flushdraw 2 of 2 suits
+- 1 Flushdraw 2 of 1 suit
+- RB everything different
+
+syntax addition to ppt:
+Qss+ - Q flush or better / Q flushdraw or better
+Qs+ - Q flushblocker or better no flush
+Qs - Q flushblocker no flush
+Qss- - Q flush or worse / Q flushdraw or worse
+
+RANKS:
+
+PAIRING:
+- no pair
+- 1 pair 
+- 2 pair 
+- set on board
+- quads on board
+
+R+ or RR+ or RO+:
+if rank matches boardcard and makes no straight - 
+1 pair then any better than this one pair
+2 pair then any better 2 pair
+trips / set any better 
+etc
+
+R- or RR- or RO-:
+same but any worse hand
+
+
+STRAIGHT:
+RO+
+if straight possible...this and any better straight/hand
+if straightdraw any hand equal number of similar nutstraight outs?!
+
+* Bet vs One Ideas:
+  
+** Tipton Infos:
+ 
+We can see, however, that he bets almost eve-
+rything with more than about 80% equity. The exceptions, such as K-K, are
+mostly chosen for card-removal reasons.
+
+Jh8s3s
+QhTs9s
+Kc7h3d
+
+vs 1/2 pot cbet:
+
+So, how much equity does he need to achieve a CF of 0.25 and call? On the
+J-high board, the BB’s strongest check-folds have about 44% equity. Border-
+line holdings such as K-10o and A-4o (without the king or ace of spades)
+are indifferent to check-calling. Thus, the BB’s check-folding range here is
+mostly unpaired hands without draws and without two overcards to the 8.
+
+On the K-high board, the BB’s strongest fold has about 43% equity, corre-
+sponding to hands like A-2o (stronger aces call) and Q-J (suited queens
+with a back-door flush-draw are better than those without!) Some hands
+with two overcards to the 7 and back-door draws call as well. Additionally,
+since draws can capture fractions of the pot far more than their equity, the
+BB continues with some draws with lower equity. Even a hand like 10-9o
+(which has around 34% equity versus the SB’s c-betting range) is a better
+draw than you might think on the K♣ - 3♦ - 7♥ board.
+
+Finally, we might expect the threshold between calling and folding on the
+drawy Q-high board to look a bit different, but again, the (made) hands
+with CF 0.25 have about 44% equity. These are nines with low kickers, but
+it is not too surprising that the BB is folding pairs on this board while he
+calls with high cards on the others. So, although the absolute hand
+strength required for continuing in the hand changed, the CF requirement
+is of course fixed, and the equity requirement is thus also about the same.
+
+
+** Calcs:
+
+Pot = P
+Bet = B
+Raise = R ( absolute size we bet 6 into 10---opponent raises to 18)
+Reraise = RR 
+Stack = S
+Equity vs Range = E
+Equity vs RaiseRange = Er
+Equity vs Call = Ec
+Equity vs Fold = Ef
+Frequency Fold = Ff
+Frequency Call = Fc
+Frequency Raise = Fr
+Equity Realisation vs Range = R
+Equity Realisation vs FoldRange = Rf
+Equity Realisation vs CallRange = Rc
+Equity Realisation vs RaiseRange = Rr
+
+Villain Raise Range = 1+3
+Villain Call Range = 2
+Villain Fold Range = 4
+
+Hero Hand is in bottom x% of his start range equity
+
+Low SPR situation (Little Play left -> Asume Equity Realisation 100%):
+Ev BF = Ff*P + Fr*(-B) + Fc*(Ec*(P+2B)-B)
+Ev BC = Ff*P + Fr*(Er*(2*R+P)-R) + Fc*(Ec*(P+2B)-B)
+Ev XB = E*P
+
+Normal SPR situation (compare Ev BF vs Ev XB and give Rc and R so BF == XB)
+
+Ev XB = R*E*P
+Ev BF = Ff*P + Fr*(-B) + Fc*(Rc*Ec*(P+2B)-B)
+R*E*P = Ff*P + Fr*(-B) + Fc*(Rc*Ec*(P+2B)-B) -> solve for R = Factor *  Rc
+
+Addition:
+Can we reraise villain?
+Ev RR/F = Ff*(B+P+R) + (1-Ff)*(-RR-B)
+Ev RR/AI = Ff*(B+P+R) + (1-Ff)*(Ec*(2*S+P)-S+B)
+
+Ev of villain range 3 vs Hero cbet range 1 + 3 ... estimate Rc with 60-80%? also estimate BC vs BShip of range 1...50 50?
+
+Ev R = Ff*(B+P) + (1-Ff)*(-R) # hero always ships/folds
+Ev R = Ff*(B+P) + (1-Ff)*0.5*(Ec*0.6*(2*R+P)-R) + (1-Ff)*0.5*(-R) # hero calls ~ 50% of range 1 and shipps 50%...Rc=60%
+Ev R = Ff*(B+P) + (1-Ff)*0.5*(Ec*0.8*(2*R+P)-R) + (1-Ff)*0.5*(-R) # hero calls ~ 50% of range 1 and shipps 50%...Rc=80%
+Ev R = Ff*(B+P) + (1-Ff)*(Ec*0.6*(2*R+P)-R) # hero calls ~ 100% of range 1...Rc=60%
+
+* Bet vs Two Ideas:
+
+Villain1 Raise Range = 1,3
+Villain1 Call Range = 2
+Villain2 Raise Range = 1,3
+Villain2 Call Range = 2
+Villain2 Overcall Range = 2
+Villain2 Overcall Raise Range = 1
+
+Hero Bet 1 3
+
+Hero Hand is in bottom x% of his start range equity
+
+Low SPR situation (Little Play left -> Asume Equity Realisation 100%):
+Ev BF = 
+
+
+
+** Brainstroming:
+http://pokerjuice.com/3way/
+
+

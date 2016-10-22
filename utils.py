@@ -12,6 +12,7 @@ RANDOM_CARD = 'Bb'
 RANDOM_CARDS = list(rank + suit for suit in RANDOM_SUITS for rank in RANDOM_RANKS)
 RANDOM_BOARD = [RANDOM_CARD]*5
 RANK_ORDER = {'A':12, 'K':11, 'Q':10, 'J':9, 'T':8, '9':7, '8':6, '7':5, '6':4, '5':3, '4':2, '3':1, '2':0}
+LOW_RANK_ORDER = {'K':12, 'Q':11, 'J':10, 'T':9, '9':8, '8':7, '7':6, '6':5, '5':4, '4':3, '3':2, '2':1,'A':0}
 LOW_CARDS = list("A2345678")
 STRAIGHTS=[list("AKQJT"),list("KQJT9"),list("QJT98"),list("JT987"),list("T9876"),list("98765"),list("87654"),list("76543"),list("65432"),list("5432A")]
 INVALID_CHAR='#'
@@ -33,6 +34,7 @@ TEST_QUERY=("select avg(equity(hero, turn)) as EQUITY \n"
 PPT_TRIAL=100000 # omaha ranger: 300000 and 50000 for evaluation
 PPT_RANK_QUERY_TRIAL=10000
 PPT_IN_RANGE_TRIAL=50000
+PPT_NEXT_CARD_EQ_TRIAL=100000
 PPT_MAX_SEC=10
 PPT_THREAD_CNT=8
 PPT_LOCATION="/home/johann/usr/PPTOddsOracle/ui_jar/"
@@ -128,14 +130,15 @@ BET_VS_2_RESULT_STR=("Some guidelines:\n"
                      "\n"
                      "\n"
                      "...")
-BET4_INFO=("Enter Hand in question\n"
+BET4_INFO=("Enter Hand in question\n\n"
            "If thinking about 4bet:\n"
            "Enter your starting stack with V1; your open/dead amount; V1 3bet size; total potsize after 3bet\n"
-           "Takes V1 pre range as start (=3bet range); 5bet AA; call rest and stacks off if equity > pot odds vs AA\n"
+           "Takes V1 pre range as start (=3bet range); 5bet subrange 1; call rest and stacks off if equity > pot odds vs your hand\n"
+           "(not accurate in real game but vs AA is very slow calc)\n\n"
            "If thinking about call 4bet:\n"
            "Enter your starting stack with V1; your 3bet size; total potsize after 3bet\n"
-           "Takes V1 pre range as start (=4bet range); asumes perfect play from us vs V1 on the flop\n"
+           "Takes V1 pre range as start (=4bet range); asumes perfect play from us vs V1 on the flop\n\n"
            "Betsizes are not checked for validity...\n")
 
 BET4_RESULT=("\n"
-             "...\n")
+             "...see logging output\n")

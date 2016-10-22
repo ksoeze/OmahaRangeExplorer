@@ -29,6 +29,7 @@
 
 from utils import *
 from itertools import combinations
+import random
 
 def parse_board(board=''):
     current_board=[]
@@ -75,6 +76,17 @@ def return_string(board,street="river"):
                 board_str=board_str+board[4][j]          
     return board_str
 
+def return_next_cards(board,all_cards=True):
+    # returns a list of cards for possible next street card
+    # if all_cards = False it only returns 1 of every rank + random suit  
+    board = parse_board(board)
+    if all_cards:
+        return_cards=[card for card in CARDS if card not in board]
+        return return_cards
+    else:
+        return_cards=[rank + random.choice(SUITS) for rank in RANKS]
+        return_cards=[card for card in return_cards if card not in board]
+        return return_cards
 
 def return_ranks(board=[]):
     ranks=[r for r,s in board if r in RANKS]
@@ -273,7 +285,6 @@ def pairs(ranks):
             pairs.append(''.join(r+r))
     return pairs
 
-
 def test():
     board_string="Ks3s3s6h7d"
     sample_board=parse_board(board_string)
@@ -290,6 +301,7 @@ def test():
     print(return_straights(ranks))
     print(return_straight_draws(ranks))
     print(return_str_flush(sample_board))
+    print(return_next_cards("Ks4s3c",False))
  #   print(pairs(ranks))
 
 

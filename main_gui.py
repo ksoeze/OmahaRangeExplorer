@@ -39,6 +39,13 @@ import time
 import pickle
 import logging
 
+import matplotlib
+matplotlib.use('TkAgg')
+
+from numpy import arange, sin, pi
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import Figure
+
 ###
 # Range Builder Functions 
 ###
@@ -217,7 +224,7 @@ def calc_ppt_set_value_3way(range_1, range_2, range_3):
         range_1.set_summary_freq(frequency)        
         equity=ppt_client.equity_query_3way(hero_selected_range,villain1_selected_range,villain2_selected_range)
         range_1.set_summary_equity(equity)
-        logging.info("Hero selected range: {0} (Eq: {1:.3f}; Freq: {:.3f2})".format(hero_selected_range,equity,frequency))        
+        logging.info("Hero selected range: {0} (Eq: {1:.3f}; Freq: {2:.3f})".format(hero_selected_range,equity,frequency))        
     else:
         range_1.set_summary_freq(0)
         range_1.set_summary_equity(0)
@@ -244,58 +251,68 @@ def eval_player_2():
 
 def eval_range_distribution():
     update_ranges()
-    # set start ranges for calc:
-    hero_range_sel=rd_start_range.get()
-    if hero_range_sel == 'Player 1 Flop':
-        rd_range.set_start_range(expand_range(rb_p1_flop.get_selected_range(),"flop"))
-    elif  hero_range_sel == 'Player 2 Flop':
-        rd_range.set_start_range(expand_range(rb_p2_flop.get_selected_range(),"flop"))
-    elif  hero_range_sel == 'Player 1 Turn':
-        rd_range.set_start_range(expand_range(rb_p1_turn.get_selected_range(),"turn"))
-    elif  hero_range_sel == 'Player 2 Turn':
-        rd_range.set_start_range(expand_range(rb_p2_turn.get_selected_range(),"turn") )       
-    elif  hero_range_sel == 'Player 1 River':
-        rd_range.set_start_range(expand_range(rb_p1_river.get_selected_range(),"river"))
-    elif  hero_range_sel == 'Player 2 River':
-        rd_range.set_start_range(expand_range(rb_p2_river.get_selected_range(),"river"))
-    elif hero_range_sel == 'Hero':
-        rd_range.set_start_range(expand_range(ev_hero.post.get_selected_range(), "river"))
-    elif hero_range_sel == 'Villain 1':
-        rd_range.set_start_range(expand_range(ev_villain1.post.get_selected_range(), "river"))
-    elif hero_range_sel == 'Villain 2':
-        rd_range.set_start_range(expand_range(ev_villain2.post.get_selected_range(), "river"))
-
-    villain_range_sel=rd_vs_range.get()
-    if villain_range_sel == 'Player 1 Flop':
-        vil_range=expand_range(rb_p1_flop.get_selected_range(),"flop")
-        eval_range(rd_range,vil_range,"river")
-    elif  villain_range_sel == 'Player 2 Flop':
-        vil_range=expand_range(rb_p2_flop.get_selected_range(),"flop")                      
-        eval_range(rd_range,vil_range,"river")
-    elif  villain_range_sel == 'Player 1 Turn':
-        vil_range=expand_range(rb_p1_turn.get_selected_range(),"turn")                      
-        eval_range(rd_range,vil_range,"river")
-    elif  villain_range_sel == 'Player 2 Turn':
-        vil_range=expand_range(rb_p2_turn.get_selected_range(),"turn")                      
-        eval_range(rd_range,vil_range,"river")
-    elif  villain_range_sel == 'Player 1 River':
-        vil_range=expand_range(rb_p1_river.get_selected_range(),"river")                      
-        eval_range(rd_range,vil_range,"river")
-    elif  villain_range_sel == 'Player 2 River':
-        vil_range=expand_range(rb_p2_river.get_selected_range(),"river")                      
-        eval_range(rd_range,vil_range,"river")
-    elif villain_range_sel == 'Hero':
-        vil_range=expand_range(ev_hero.post.get_selected_range(),"river")                      
-        eval_range(rd_range,vil_range,"river")
-    elif villain_range_sel == 'Villain 1':
-        vil_range=expand_range(ev_villain1.post.get_selected_range(),"river")                      
-        eval_range(rd_range,vil_range,"river")
-    elif villain_range_sel == 'Villain 2':
-        vil_range=expand_range(ev_villain2.post.get_selected_range(),"river")                      
-        eval_range(rd_range,vil_range,"river")
+    start_ranges=get_range_distribution_ranges()
+    rd_range.set_start_range(start_ranges[0])
+    eval_range(rd_range,start_ranges[1],"river")
     return
 
-        
+def get_range_distribution_ranges():
+    hero_range_sel=rd_start_range.get()
+    hero_range=""
+    if hero_range_sel == 'Player 1 Flop':
+        hero_range= expand_range(rb_p1_flop.get_selected_range(),"flop")
+    elif  hero_range_sel == 'Player 2 Flop':
+        hero_range=expand_range(rb_p2_flop.get_selected_range(),"flop")
+    elif  hero_range_sel == 'Player 1 Turn':
+        hero_range=expand_range(rb_p1_turn.get_selected_range(),"turn")
+    elif  hero_range_sel == 'Player 2 Turn':
+        hero_range=expand_range(rb_p2_turn.get_selected_range(),"turn")       
+    elif  hero_range_sel == 'Player 1 River':
+        hero_range=expand_range(rb_p1_river.get_selected_range(),"river")
+    elif  hero_range_sel == 'Player 2 River':
+        hero_range=expand_range(rb_p2_river.get_selected_range(),"river")
+    elif hero_range_sel == 'Hero':
+        hero_range=expand_range(ev_hero.post.get_selected_range(), "river")
+    elif hero_range_sel == 'Villain 1':
+        hero_range=expand_range(ev_villain1.post.get_selected_range(), "river")
+    elif hero_range_sel == 'Villain 2':
+        hero_range=expand_range(ev_villain2.post.get_selected_range(), "river")
+
+    villain_range_sel=rd_vs_range.get()
+    vil_range=""
+    if villain_range_sel == 'Player 1 Flop':
+        vil_range=expand_range(rb_p1_flop.get_selected_range(),"flop")
+    elif  villain_range_sel == 'Player 2 Flop':
+        vil_range=expand_range(rb_p2_flop.get_selected_range(),"flop")                      
+    elif  villain_range_sel == 'Player 1 Turn':
+        vil_range=expand_range(rb_p1_turn.get_selected_range(),"turn")                      
+    elif  villain_range_sel == 'Player 2 Turn':
+        vil_range=expand_range(rb_p2_turn.get_selected_range(),"turn")                      
+    elif  villain_range_sel == 'Player 1 River':
+        vil_range=expand_range(rb_p1_river.get_selected_range(),"river")                      
+    elif  villain_range_sel == 'Player 2 River':
+        vil_range=expand_range(rb_p2_river.get_selected_range(),"river")                      
+    elif villain_range_sel == 'Hero':
+        vil_range=expand_range(ev_hero.post.get_selected_range(),"river")                      
+    elif villain_range_sel == 'Villain 1':
+        vil_range=expand_range(ev_villain1.post.get_selected_range(),"river")                      
+    elif villain_range_sel == 'Villain 2':
+        vil_range=expand_range(ev_villain2.post.get_selected_range(),"river")                      
+    return [hero_range,vil_range]
+
+
+def turn_card_calc():
+    update_ranges()
+    ppt_client.board=return_string(parse_board(gi_board.get()),"flop") if parse_board(gi_board.get()) else ""
+    start_ranges=get_range_distribution_ranges()
+    ppt_queue.put((ppt_client.next_card_eval,start_ranges[0],start_ranges[1]))
+    return
+def river_card_calc():
+    update_ranges()
+    ppt_client.board=return_string(parse_board(gi_board.get()),"turn") if parse_board(gi_board.get()) else ""
+    start_ranges=get_range_distribution_ranges()
+    ppt_queue.put((ppt_client.next_card_eval,start_ranges[0],start_ranges[1]))    
+    return
 ###
 # Equity Calcs Functions
 ###
@@ -337,6 +354,60 @@ def call_4bet_calc():
                    ev_4bet_3bsize.get(), ev_4bet_potsize.get()))    
     return
 
+def hero_ship_plot():
+    popup_window=Toplevel()
+    popup_window.wm_title("Hero ships his stack in")
+
+    figure = Figure(figsize=(15, 10), dpi=160)
+    plot = figure.add_subplot(111)
+    plot.grid(True)
+    plot.set_xticks(arange(0,0.5,0.02))
+    plot.set_yticks(arange(0,1,0.05))
+    interval = arange(0.0, 0.5, 0.01)
+    stack=ppt_client.str2float(ev_bet_vs1_stacksize.get())
+    pot=ppt_client.str2float(ev_bet_vs1_potsize.get())
+    function = (-interval*(pot + 2*stack) + stack)/(pot - interval*(pot+2*stack) + stack)
+
+    plot.plot(interval,function)
+    plot.set_title("Hero ships; Equity and corresponding FEQ for EV ship = 0")
+    plot.set_xlabel("Equity")
+    plot.set_ylabel("Villain Fold Frequency")
+
+    canvas=FigureCanvasTkAgg(figure, master=popup_window)
+    canvas.show()
+    canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
+    canvas._tkcanvas.pack(side=TOP, fill=BOTH, expand=1)
+
+    popup_window.mainloop()
+    return
+
+def villain_ship_plot():
+    popup_window=Toplevel()
+    popup_window.wm_title("Villain ships his stack in over Hero bet")
+
+    figure = Figure(figsize=(15, 10), dpi=160)
+    plot = figure.add_subplot(111)
+    plot.grid(True)
+    plot.set_xticks(arange(0,0.5,0.02))
+    plot.set_yticks(arange(0,1,0.05))
+    interval = arange(0.0, 0.5, 0.01)
+    stack=ppt_client.str2float(ev_bet_vs1_stacksize.get())
+    pot=ppt_client.str2float(ev_bet_vs1_potsize.get())
+    bet=ppt_client.str2float(ev_bet_vs1_betsize.get())
+    function = (-interval*(pot + 2*stack) + stack)/(pot+bet - interval*(pot+2*stack) + stack)
+
+    plot.plot(interval,function)
+    plot.set_title("Villain ships over Hero bet; Equity and corresponding FEQ for EV ship = 0")
+    plot.set_xlabel("Equity")
+    plot.set_ylabel("Villain Fold Frequency")
+
+    canvas=FigureCanvasTkAgg(figure, master=popup_window)
+    canvas.show()
+    canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
+    canvas._tkcanvas.pack(side=TOP, fill=BOTH, expand=1)
+
+    popup_window.mainloop()
+    return
 ###
 # General Functions
 ###
@@ -571,11 +642,12 @@ def ppt_task_consumer(queue):
             logging.debug("Finished PPT task")
             
 def set_ppt_board(street):
-    if parse_board(gi_board.get()): # ignore empty/non valid board
+    ppt_client.board=""
+    if parse_board(gi_board.get()):
         ppt_client.board=return_string(parse_board(gi_board.get()),street)
         
 def expand_range(range_string, street):
-    board=return_string(parse_board(gi_board.get()),street) if parse_board(gi_board.get()) else []
+    board=return_string(parse_board(gi_board.get()),street) if parse_board(gi_board.get()) else ""
     return parse_hand(range_string,board)
 
 
@@ -702,7 +774,10 @@ rd_range_frame.grid(column=0, columnspan=4, row=1, sticky=(N, W, E, S))
 rd_range=Range(rd_range_frame,"Range",rd_start_range.get())
 rd_eval_bu=ttk.Button(range_distribution_frame, text="EVAL RANGE", command = lambda: eval_range_distribution())
 rd_eval_bu.grid(column=4, row=0, sticky=W,padx=BUTTON_PADX)
-
+rd_eval_bu=ttk.Button(range_distribution_frame, text="TURN CARD", command = lambda: turn_card_calc())
+rd_eval_bu.grid(column=5, row=0, sticky=W,padx=BUTTON_PADX)
+rd_eval_bu=ttk.Button(range_distribution_frame, text="RIVER CARD", command = lambda: river_card_calc())
+rd_eval_bu.grid(column=6, row=0, sticky=W,padx=BUTTON_PADX)
 ###
 # Range Builder Code
 ###
@@ -861,6 +936,10 @@ ttk.Entry(ev_bet_vs1_input_frame,textvariable=ev_bet_vs1_reraisesize,width=INPUT
 ttk.Combobox(ev_bet_vs1_input_frame, textvariable=ev_bet_vs1_street, values=('flop','turn','river'),font=(FONT_FAM,FONT_SIZE),width=10,state='readonly').grid(column=3, row=0, sticky=W, padx=PADX, pady=PADY)
 ev_bet_vs_1_bu=ttk.Button(ev_bet_vs1_input_frame, text="GO!", command=bet_vs_1_calc)
 ev_bet_vs_1_bu.grid(column=3, row=4, sticky=W,padx=BUTTON_PADX)
+ev_bet_vs_1_hero_plot_bu=ttk.Button(ev_bet_vs1_input_frame, text="Hero \'ships\'", command=hero_ship_plot)
+ev_bet_vs_1_hero_plot_bu.grid(column=4, row=4, sticky=W,padx=BUTTON_PADX)
+ev_bet_vs_1_villain_plot_bu=ttk.Button(ev_bet_vs1_input_frame, text="Villain \'ships\'", command=villain_ship_plot)
+ev_bet_vs_1_villain_plot_bu.grid(column=5, row=4, sticky=W,padx=BUTTON_PADX)
 
 ###
 # Bet vs two Code

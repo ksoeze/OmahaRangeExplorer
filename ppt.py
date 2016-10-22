@@ -35,6 +35,7 @@ import time
 from utils import *
 import re
 from hand import parse_hand
+from board import return_next_cards
 
 import logging
 
@@ -447,7 +448,7 @@ class OddsOracleServer():
         result_str+="Hand equity vs V1 range 1: {0:.1f}%; V2 range 1: {1:.1f}%; V12 range 1: {2:.1f}%\n".format(
             hand_eq_vs_v1_1,hand_eq_vs_v2_1,hand_eq_vs_v12_1)
         result_str+="Cbet gets raised (V1 raises range 1+3, calls 2; V2 raises 1+3 when V1 folds 4)~: {:.1f}\n".format(villain1_raise_freq + (1-villain1_raise_freq/100)*villain2_raise_freq)
-        result_str+="Both fold: {:.1f}; ".format((villain1_folds_freq/100)*(villain2_folds_freq)*100)
+        result_str+="Both fold: {:.1f}; ".format((villain1_folds_freq/100)*(villain2_folds_freq/100)*100)
         result_str+="bet get called ~:{:.1f} \n".format(villain1_calls_freq+(1-villain1_calls_freq/100)*villain2_calls_freq)
         result_str+="Equity vs call V1: {0:.1f}%; vs call V2: {1:.1f}%; vs call both: {2:.1f}%\n".format(
         hand_eq_vs_v1_2,hand_eq_vs_v2_2,hand_eq_vs_v12_2)
@@ -505,6 +506,7 @@ class OddsOracleServer():
             invest_pre,invest_pre+open_size,pot_flop,invest_post))
 
         query=("select count(inRange(villain, '{0}')) as GET5BETPERCENT,\n"
+               "avg(riverEquity(hero)) as EQUITY,"
                "avg( \n"  
                "case \n"      
                "when inRange(villain, '{1}')\n"
@@ -552,10 +554,11 @@ class OddsOracleServer():
         invest_pre=pot_call_3bet
         invest_post=stack_size-pot_call_3bet-bet3_size
 
-        logging.info("We invest {0} pre (total 4bet size: {1}) wiht pot otf: {2} and stacks left: {3}".format(
+        logging.info("We invest {0:.2f} pre (total 4bet size: {1:.2f}) wiht pot otf: {2:.2f} and stacks left: {3:.2f}".format(
             invest_pre,invest_pre+bet3_size,pot_flop,invest_post))
 
-        query=("select avg( \n"  
+        query=("select avg(riverEquity(hero)) as EQUITY,\n"
+               "avg( \n"  
                "case\n"
                "when minEquity(hero,flop,{0:.4f})\n"
                 "then {1}*riverEquity(hero) - {2}\n"
@@ -579,6 +582,33 @@ class OddsOracleServer():
         logging.info(self.run_query(query))    
         return
 
+    def next_card_eval(self, hero_range, villain_range):
+        next_cards=return_next_cards(self.board,False)
+        board_original=self.board
+        result=[]
+        overall_equity=self.equity_query(hero_range,villain_range)
+        logging.info(DOTS)
+        logging.info("Hero Range: {}".format(hero_range))
+        logging.info("Villain Range: {}".format(villain_range))
+        logging.info("For board {0}, Hero equity is {1:.2f}% \n".format(self.board,overall_equity))
+        result.append((self.board,overall_equity,0.0))
+        self.trial=PPT_NEXT_CARD_EQ_TRIAL
+        for card in next_cards:
+            self.board+=card
+            equity=self.equity_query(hero_range,villain_range)
+            logging.info("For board {0}, Hero equity is {1:.2f}% (Difference: {2:.2f}%)".format(self.board,equity,equity-overall_equity))
+            result.append((self.board,equity,equity-overall_equity))
+            self.board=board_original
+        logging.info("\n")
+        logging.info("Sorted results for next Card:")
+        result.sort(key=lambda x:x[1],reverse=True)
+        for x in result:
+            logging.info("For board {0}, Hero equity is {1:.2f}% (Difference: {2:.2f}%)".format(x[0],x[1],x[2]))
+        logging.info("DONE")
+        logging.info(DOTS)
+        self.trial=PPT_TRIAL
+        return
+        
     def format_range(self,hand_range):
         return parse_hand(hand_range,self.board)
     
