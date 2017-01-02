@@ -143,9 +143,20 @@ def replace_strings(hand,board):
                 replace_hands=str_flush+fulls_or_better+flush_suit+straights+hand_board_int[0:hand_board_int.index(compare_x)+1]
                 hand=hand.replace(x,range_string(replace_hands))
 
+    match_expr=re.compile('['+''.join(LOW_CARDS)+']'+'{2}'+'\-') #find HILO hand with - at the end
+    hand_sections=match_expr.findall(hand)
+
+    if hand_sections:
+        low_hands=return_lows(ranks)
+        for x in hand_sections:
+            compare_x=x[:-1]
+            if compare_x in low_hands:
+                replace_hands=low_hands[0:low_hands.index(compare_x)+1]
+                hand=hand.replace(x,range_string(replace_hands))
     if '+' in hand:
        logging.error("Could not resolve one or more + expressions in hand:\n{0}".format(hand))
-
+    if '-' in hand:
+       logging.error("Could not resolve one or more - expressions in hand:\n{0}".format(hand))
     return hand
 
 def range_string(hand_range):

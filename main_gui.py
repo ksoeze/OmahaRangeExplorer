@@ -739,7 +739,7 @@ gi_game.set("omahahi")
 ttk.Entry(game_info_frame,textvariable=gi_board,width=INPUT_LENGTH//3,font=(FONT_FAM,FONT_SIZE)).grid(column=1, row=1, sticky=W, padx=PADX, pady=PADY)
 ttk.Entry(game_info_frame,textvariable=gi_dead,width=INPUT_LENGTH//3,font=(FONT_FAM,FONT_SIZE)).grid(column=1, row=2, sticky=W, padx=PADX, pady=PADY)
 ttk.Checkbutton(game_info_frame, variable=gi_debug, onvalue=True, offvalue=False, command= lambda: change_logging_status(gi_debug.get())).grid(column=1, row=3, sticky=W, padx=PADX, pady=PADY)
-gi_combo_box=ttk.Combobox(game_info_frame, textvariable=gi_game, values=('omahahi'),font=(FONT_FAM,FONT_SIZE),width=10,state='readonly').grid(column=3, row=1, sticky=W, padx=PADX, pady=PADY)
+gi_combo_box=ttk.Combobox(game_info_frame, textvariable=gi_game, values=('omahahi','omaha8'),font=(FONT_FAM,FONT_SIZE),width=10,state='readonly').grid(column=3, row=1, sticky=W, padx=PADX, pady=PADY)
 
 
 notebook_frame=ttk.Notebook(mainframe,padding=FRAME_PADDING)

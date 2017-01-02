@@ -30,6 +30,7 @@
 from utils import *
 from itertools import combinations
 import random
+import collections
 
 def parse_board(board=''):
     current_board=[]
@@ -285,8 +286,44 @@ def pairs(ranks):
             pairs.append(''.join(r+r))
     return pairs
 
+def best_low_board(hand,low_ranks):
+    if len(low_ranks)==2: # low draw...just add random low card and proceed (trying 8 going down from there until card is not in ranks)
+        for i in sorted(LOW_CARDS,key=lambda x:LOW_RANK_ORDER[x], reverse=True):
+            if i not in low_ranks:
+                low_ranks.append(i)
+                break
+    if len(low_ranks)>=3:
+        possible_low_hands=[sorted(list(hand + board),key=lambda x:LOW_RANK_ORDER[x]) for board in combinations(low_ranks,3)
+                            if hand[0] not in board and hand[1] not in board]
+        if possible_low_hands:
+            return sorted(possible_low_hands,key=lambda x:(LOW_RANK_ORDER[x[4]],LOW_RANK_ORDER[x[3]],
+                                                           LOW_RANK_ORDER[x[2]],LOW_RANK_ORDER[x[1]],
+                                                           LOW_RANK_ORDER[x[0]]))[0]
+        else:
+            return []    
+    return []
+
+def return_lows(ranks):
+    ranks=set(ranks)
+    low_board_ranks=[rank for rank in ranks if rank in LOW_CARDS]
+    low_3_board_ranks=[board for board in combinations(low_board_ranks,3)]
+    low_hands={}
+    for hand in combinations(LOW_CARDS,2):
+        if best_low_board(hand,low_board_ranks):
+            low_hands.update({hand:best_low_board(hand,low_board_ranks)})
+    for hand in low_hands:
+        low_hands[hand]=sorted(low_hands[hand],key=lambda x:LOW_RANK_ORDER[x])
+        #print("Low Hand {} with the 2 Cards {}".format(low_hands[hand],hand))
+        
+    low_hands_sorted=list(sorted(low_hands.keys(),key=lambda x:(LOW_RANK_ORDER[low_hands[x][4]],
+                                                                LOW_RANK_ORDER[low_hands[x][3]],
+                                                                LOW_RANK_ORDER[low_hands[x][2]],
+                                                                LOW_RANK_ORDER[low_hands[x][1]],
+                                                                LOW_RANK_ORDER[low_hands[x][0]])))
+    return [''.join(sorted(low, key=lambda x:LOW_RANK_ORDER[x])) for low in low_hands_sorted]
+
 def test():
-    board_string="Ks3s3s6h7d"
+    board_string="AsKs9sTh"
     sample_board=parse_board(board_string)
     ranks=return_ranks(sample_board)
     
@@ -296,12 +333,13 @@ def test():
   #  print(return_flushes(sample_board))
   #  print(return_flushdraws(sample_board,'c'))
   #  print(rank_count(return_ranks(sample_board)))
-    print(hand_board_intersections(return_ranks(sample_board)))
-    print(return_string(sample_board,"river"))
-    print(return_straights(ranks))
-    print(return_straight_draws(ranks))
-    print(return_str_flush(sample_board))
-    print(return_next_cards("Ks4s3c",False))
+  #  print(hand_board_intersections(return_ranks(sample_board)))
+  #  print(return_string(sample_board,"river"))
+  #  print(return_straights(ranks))
+  #  print(return_straight_draws(ranks))
+  #  print(return_str_flush(sample_board))
+  #  print(return_next_cards("Ks4s3c",False))
+    print(return_lows(ranks))
  #   print(pairs(ranks))
 
 
