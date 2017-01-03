@@ -19,7 +19,7 @@
 # Commentary: 
 # 
 # Possible to remove additional redudant () in remove parenthesis
-# 
+# Tue Jan  3 04:05:32 2017 hilo sign - is not good because of AA-TT hands etc
 
 from board import *
 import re
@@ -143,7 +143,7 @@ def replace_strings(hand,board):
                 replace_hands=str_flush+fulls_or_better+flush_suit+straights+hand_board_int[0:hand_board_int.index(compare_x)+1]
                 hand=hand.replace(x,range_string(replace_hands))
 
-    match_expr=re.compile('['+''.join(LOW_CARDS)+']'+'{2}'+'\-') #find HILO hand with - at the end
+    match_expr=re.compile('['+''.join(LOW_CARDS)+']'+'{2}'+'\<') #find HILO hand with < at the end
     hand_sections=match_expr.findall(hand)
 
     if hand_sections:
@@ -155,8 +155,8 @@ def replace_strings(hand,board):
                 hand=hand.replace(x,range_string(replace_hands))
     if '+' in hand:
        logging.error("Could not resolve one or more + expressions in hand:\n{0}".format(hand))
-    if '-' in hand:
-       logging.error("Could not resolve one or more - expressions in hand:\n{0}".format(hand))
+    if '<' in hand:
+       logging.error("Could not resolve one or more < expressions in hand:\n{0}".format(hand))
     return hand
 
 def range_string(hand_range):
