@@ -19,7 +19,7 @@
 # Commentary: 
 # 
 # Ignores 2nd 2 pair on paired board: Q5 is not in list on AQ544 board 
-# 
+# HILO not working correctly [16-11-2017]
 # 
 
 # Change Log:
@@ -323,24 +323,25 @@ def return_lows(ranks):
     return [''.join(sorted(low, key=lambda x:LOW_RANK_ORDER[x])) for low in low_hands_sorted]
 
 def test():
-    board_string="AsKs9sTh"
+    board_string="AsKs9s9h"
     sample_board=parse_board(board_string)
     ranks=return_ranks(sample_board)
     
-  #  print(sample_board)
-  #  print(return_ranks(sample_board))
-  #  print(return_suits(sample_board))
-  #  print(return_flushes(sample_board))
-  #  print(return_flushdraws(sample_board,'c'))
-  #  print(rank_count(return_ranks(sample_board)))
-  #  print(hand_board_intersections(return_ranks(sample_board)))
-  #  print(return_string(sample_board,"river"))
-  #  print(return_straights(ranks))
-  #  print(return_straight_draws(ranks))
-  #  print(return_str_flush(sample_board))
-  #  print(return_next_cards("Ks4s3c",False))
+    print(sample_board)
+    print(return_ranks(sample_board))
+    print(return_suits(sample_board))
+    print(return_fulls_or_better(ranks))
+    print(return_flushes(sample_board))
+    print(return_flushdraws(sample_board,'c'))
+    print(rank_count(return_ranks(sample_board)))
+    print(hand_board_intersections(return_ranks(sample_board)))
+    print(return_string(sample_board,"river"))
+    print(return_straights(ranks))
+    print(return_straight_draws(ranks))
+    print(return_str_flush(sample_board))
+    print(return_next_cards("Ks4s3c",False))
     print(return_lows(ranks))
- #   print(pairs(ranks))
+    print(pairs(ranks))
 
 
 if __name__ == '__main__':

@@ -38,7 +38,7 @@ PPT_NEXT_CARD_EQ_TRIAL=100000
 PPT_MAX_SEC=10
 PPT_THREAD_CNT=8
 PPT_LOCATION="/home/johann/usr/PPTOddsOracle/ui_jar/"
-PPT_NUM_DIGETS=4 # whole length including decimal point (minimal length = 0.00)
+PPT_NUM_DIGETS=3 # whole length including decimal point (minimal length = 0.0)
 PPT_GAME="omahahi" # std game
 PPT_SYNTAX='Generic'
 

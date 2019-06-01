@@ -328,6 +328,11 @@ def bet_vs_1_calc():
                    ))
     return
 
+def rank_hand():
+    update_ranges()
+    ppt_queue.put((ppt_client.rank_hand,
+                   ev_bet_vs1_hand.get()))
+    
 def bet_vs_2_calc():
     eval_range_3way(ev_hero.post,ev_villain1.post,ev_villain2.post,ev_bet_vs2_street.get())
     eval_range_3way(ev_villain1.post,ev_villain2.post,ev_hero.post,ev_bet_vs2_street.get())
@@ -806,7 +811,7 @@ textframe.grid(column=1, row=0, sticky=(N, W, E, S))
 textframe.columnconfigure(0, weight=1)
 textframe.rowconfigure(0, weight=1)
 
-text_output = scrolledtext.ScrolledText(textframe, height=TEXT_OUTPUT_HEIGHT, width=TEXT_OUTPUT_WIDTH, font=(FONT_FAM,FONT_SIZE))
+text_output = scrolledtext.ScrolledText(textframe, height=TEXT_OUTPUT_HEIGHT, width=TEXT_OUTPUT_WIDTH, font=(FONT_FAM_MONO,FONT_SIZE))
 text_output.grid(column=0, row=0, sticky=(N,W,E,S))
 
 # redir = RedirectText(text_output)
@@ -874,7 +879,7 @@ gi_game.set("omahahi")
 ttk.Entry(game_info_frame,textvariable=gi_board,width=INPUT_LENGTH//3,font=(FONT_FAM,FONT_SIZE)).grid(column=1, row=1, sticky=W, padx=PADX, pady=PADY)
 ttk.Entry(game_info_frame,textvariable=gi_dead,width=INPUT_LENGTH//3,font=(FONT_FAM,FONT_SIZE)).grid(column=1, row=2, sticky=W, padx=PADX, pady=PADY)
 ttk.Checkbutton(game_info_frame, variable=gi_debug, onvalue=True, offvalue=False, command= lambda: change_logging_status(gi_debug.get())).grid(column=1, row=3, sticky=W, padx=PADX, pady=PADY)
-gi_combo_box=ttk.Combobox(game_info_frame, textvariable=gi_game, values=('omahahi','omaha8'),font=(FONT_FAM,FONT_SIZE),width=10,state='readonly').grid(column=3, row=1, sticky=W, padx=PADX, pady=PADY)
+gi_combo_box=ttk.Combobox(game_info_frame, textvariable=gi_game, values=('omahahi','omaha8', 'omahahi5', 'omaha85'),font=(FONT_FAM,FONT_SIZE),width=10,state='readonly').grid(column=3, row=1, sticky=W, padx=PADX, pady=PADY)
 
 
 notebook_frame=ttk.Notebook(mainframe,padding=FRAME_PADDING)
@@ -1071,6 +1076,8 @@ ttk.Entry(ev_bet_vs1_input_frame,textvariable=ev_bet_vs1_reraisesize,width=INPUT
 ttk.Combobox(ev_bet_vs1_input_frame, textvariable=ev_bet_vs1_street, values=('flop','turn','river'),font=(FONT_FAM,FONT_SIZE),width=10,state='readonly').grid(column=3, row=0, sticky=W, padx=PADX, pady=PADY)
 ev_bet_vs_1_bu=ttk.Button(ev_bet_vs1_input_frame, text="GO!", command=bet_vs_1_calc)
 ev_bet_vs_1_bu.grid(column=3, row=4, sticky=W,padx=BUTTON_PADX)
+ev_rank_hand_bu=ttk.Button(ev_bet_vs1_input_frame, text="RANK Hand", command=rank_hand)
+ev_rank_hand_bu.grid(column=5, row=3, sticky=W,padx=BUTTON_PADX)
 ev_bet_vs_1_hero_plot_bu=ttk.Button(ev_bet_vs1_input_frame, text="Hero \'ships\'", command=hero_ship_plot)
 ev_bet_vs_1_hero_plot_bu.grid(column=4, row=4, sticky=W,padx=BUTTON_PADX)
 ev_bet_vs_1_villain_plot_bu=ttk.Button(ev_bet_vs1_input_frame, text="Villain \'ships\'", command=villain_ship_plot)
