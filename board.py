@@ -3,7 +3,7 @@
 # 
 # Filename: board.py
 # Description: 
-# Author: Johann Ertl
+# Author: Johann 
 # Maintainer: 
 # Created: Don Mar 17 10:47:22 2016 (+0100)
 # Version: 

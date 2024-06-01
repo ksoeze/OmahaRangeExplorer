@@ -1,0 +1,176 @@
+#+TITLE: Omaha Range Explorer
+#+AUTHOR: [Johann]
+#+DATE: [2024-05-29 Mi]
+#+OPTIONS: toc:t
+
+* Omaha Range Explorer
+
+** Description
+Omaha Range Explorer is a Python-based tool designed to evaluate and analyze Omaha 4-card, 5-card, and HILO poker hands and ranges. The tool allows users to construct in-game ranges over multiple streets using smart syntax, run equity and hand rank calculations, and perform basic EV estimations.
+
+This was my first Python project back in 2016, inspired by software tools like Pokerjuice and Omaha Ranger. Now, more sophisticated tools such as Monkersolver and study programs based on it are available on the market. Therefore, I decided to publish my private tools here.
+
+I believe it is still useful for learning range frequencies and equities in a more intuitive way compared to Solver Output. Additionally, the 5-card support is valuable since the commercial 5-card solver is not widely available.
+
+The equity calculations are done with the OddsOracle Desktop Software from ProPokerTools.com (currently under construction, but as of the date of this writing, you can obtain a temporary free license).
+
+** Features
+    - Multi-street range construction with frequency and equity calculation
+    - Smart Syntax for faster range input, supporting ProPokerTool hand macros
+    - EV (Expected Value) estimations for low SPR (Stack to Pot Ratio) spots
+    - Hand ranking and evaluation against different HU and 3-way ranges
+    - Fold Equity - Equity Graphs for better understanding of semibluffs
+** Screenshots
+#+CAPTION: Main Interface
+[[file:img/omaha-range-builder.png][Main Interface - Range Builder]]
+#+CAPTION: EV Calculation Interface
+[[file:img/omaha-ev-calc.png][EV Calc 2way 3way vs4bet]]
+
+* Installation Guide
+** Prerequisites
+Before you begin, ensure you have Python 3.x installed on your computer. You can download it from [[https://www.python.org/downloads/][python.org]]. On Windows, make sure to select "Add Python to PATH" during installation.
+
+### Download and Install OddsOracle:
+1. Go to [[http://www.propokertools.com/][ProPokerTools.com]] and download OddsOracle.
+2. Install OddsOracle on your computer.
+
+### Verify Java Installation:
+Make sure Java is installed and added to your system's PATH. You can verify this by running:
+   #+BEGIN_SRC sh
+   java -version
+   #+END_SRC
+If Java is not recognized, download and install it from [[https://www.java.com/en/download/][java.com]].
+
+### Check XMLRPCServer:
+1. Open a terminal or command prompt.
+2. Navigate to the =ui_jar= folder in your PPTOddsOracle installation:
+   #+BEGIN_SRC sh
+   cd path\to\PPTOddsOracle\ui_jar
+   #+END_SRC
+3. Start the XMLRPCServer:
+   #+BEGIN_SRC sh
+   java -cp p2.jar propokertools.cli.XMLRPCServer
+   #+END_SRC
+You should see the output:
+   #+BEGIN_QUOTE
+   Starting PPTServer on port 37890 ...
+   #+END_QUOTE
+
+** Installation Steps
+
+1. Download the Repository:
+   - Go to the [[https://github.com/ksoeze/OmahaRangeCrusher][OmahaRangeExplorer GitHub page]].
+   - Click the green "Code" button and select "Download ZIP".
+   - Extract the ZIP file to a folder on your computer.
+
+2. Open a Terminal or Command Prompt:
+   - On Windows: Press =Win + R=, type =cmd=, and press Enter.
+   - On Linux: Open your preferred terminal emulator.
+
+3. Navigate to the Project Directory:
+   #+BEGIN_SRC sh
+   cd path\to\OmahaRangeCrusher
+   #+END_SRC
+
+4. Install the Required Dependencies:
+   #+BEGIN_SRC sh
+   pip install -r requirements.txt
+   #+END_SRC
+
+5. Configure OddsOracle Path:
+   - Open =utils.py= in a text editor (e.g., Notepad, nano, vim).
+   - Update the following paths:
+     - =PPT_LOCATION=: Set this to the path of the =PPTOddsOracle/ui_jar/= folder.
+     - =MACRO_FILE_LOCATION=: (Optional) Set this to the path of your =macro.cvs= file if you use custom macros. Also, add it in OddsOracle under =File -> Preferences -> Custom range macros=.
+
+* Usage
+
+#+begin_src sh
+python main_gui.py
+#+end_src
+
+The program was intended for private use. Therefore, it lacks the usual checks but is quite verbose in the right text output window.
+At startup, check if it could start the OddsOracle server correctly:
+
+INFO - Check / Start PPT Server
+INFO - Try to Run TEST QUERY
+ERROR - No connection to PPT server...try to open it & wait 2 sec
+INFO - Try executing first sample again
+INFO - EQUITY = 0.6493266250000002
+100000 trials
+
+The screenshot shows a simple example of defending HU with a weak A in a 3-bet pot. (session -> 3bet-pot-barrl-defend-spot-weak-A-hand-galfond-vid)
+
+- Top left box: input a board. Select a game. Input dead cards.
+- Debug activated gives you more verbose output on the right.
+
+Player 1 starts with a 15% 3-bet range (custom macro range).
+The right input box is for exclude range (e.g., villain has a 70% open raising range without a 3% 4-bet range).
+On each street, you can split the range into up to 4 subranges. They are exclusive from top to bottom. So the second range excludes the first range, the third one excludes the 1st and 2nd ranges, and so on.
+The left checkboxes select the range for the next street. In this case, 1 and 3rd.
+Evaluating a street gives you:
+- Top Row: overall range equity
+- For each subrange, you get the frequency of how often we hold this range and its overall equity against the villain's street starting range.
+- The last row "Selection Combined" gives the frequency of the selected ranges (in this case, range 1 + 3 -- numbers don’t add up perfectly because ProPokertools gives only approximate percentages after x trials).
+- You can change the number of trials setting in utils.py. (Higher speed vs higher accuracy tradeoff)
+- The Equity in this row is against the villain's selected ranges! In this case, against the specific hand in question.
+
+The same goes for Turn and River. When evaluating a street or a whole player, you see the queries run behind. It is good to check for errors there. The software doesn’t check for typos/valid range inputs.
+
+Range distribution region besides the General Settings is an additional possibility to split up a range and have further insights.
+The TURN CARD and RIVER BUTTON give you equity changes for Turn or River starting ranges on different cards.
+
+** Smart Syntax
+
+Overall, the queries are sent to the OddsOracle software.
+So, look at the ProPokertool website for their syntax.
+
+There are two additional operators which are parsed before sending the queries:
+- + for made hands and draws
+- > for low hands in HILO games
+
+Made Hands:
+Enter the minimum hand and add +
+A+ on As7c2c board results in a range of:
+AA,77,22,A7,A2,72,A which in short would be:
+A,77,22,72
+Flushes a rank is mandatory:
+So, on As5sTs5c Jss+ results in:
+A5,T5,TT,55,AA,Kss,Qss,Jss
+If there is an unknown + expression, you get an error message with the output.
+Pocket pairs are not included in smart syntax, so:
+7+ on A72 gives:
+22,A,7 but doesn’t include 88-JJ
+88+ in this case also doesn’t work.
+
+Draws:
+
+Works for flush and straight draws:
+
+Jss+ on Ah7s2s gives:
+Ass,Kss,Qss,Jss
+
+34+ on Ah7s2s gives:
+34,35,45,345
+
+Low Hands:
+
+Since I don’t really play HILO much, only made low syntax is supported with <
+
+So, A6< on 3h5h7h results in:
+A2,A4,24,A6
+Unfortunately, there is no support for low draws.
+
+** EV Calcs
+
+I won’t describe the EV Calc window here in detail. It makes quite a few assumptions and without knowledge about the math behind EV calculations by hand, it might be more harmful to most users.
+If you want to try, read through the Info and Result box text and look at the output when running a request and take it from there.
+If you find it interesting and useful but have questions, open a request here on GitHub and I might help you out.
+
+
+* License
+This project is licensed under the MIT License - see the =LICENSE= file for details.
+
+* Contact
+The software is provided as-is and I don't have plans for further features or massive changes.
+For short questions and small changes feel free to reach out.

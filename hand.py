@@ -3,7 +3,7 @@
 # 
 # Filename: hand.py
 # Description: 
-# Author: Johann Ertl
+# Author: Johann 
 # Maintainer: 
 # Created: Mon Mar 14 17:50:36 2016 
 # Version: 

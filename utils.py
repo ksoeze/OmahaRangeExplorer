@@ -21,7 +21,8 @@ INVALID_CHAR='#'
 # developement constants
 
 DEBUG = True
-MACRO_FILE_LOCATION="/home/johann/Documents/poker/oddsOracleMacros.csv"
+#MACRO_FILE_LOCATION="/home/johann/Documents/poker/oddsOracleMacros.csv"
+MACRO_FILE_LOCATION="./oddsOracleMacros.csv"
 
 PPT_SERVER_PORT="http://localhost:37890"
 TEST_QUERY=("select avg(equity(hero, turn)) as EQUITY \n"
@@ -36,8 +37,9 @@ PPT_RANK_QUERY_TRIAL=10000
 PPT_IN_RANGE_TRIAL=50000
 PPT_NEXT_CARD_EQ_TRIAL=100000
 PPT_MAX_SEC=10
-PPT_THREAD_CNT=8
-PPT_LOCATION="/home/johann/usr/PPTOddsOracle/ui_jar/"
+PPT_THREAD_CNT=16
+#PPT_LOCATION="/home/johann/usr/PPTOddsOracle/ui_jar/"
+PPT_LOCATION="C:\Program Files\PPTOddsOracle\ui_jar"
 PPT_NUM_DIGETS=3 # whole length including decimal point (minimal length = 0.0)
 PPT_GAME="omahahi" # std game
 PPT_SYNTAX='Generic'
@@ -73,7 +75,7 @@ GENERAL_SETTING_PADDING="10 10 10 10"
 FONT_SIZE=9 # std font size
 FONT_FAM='Helvetica'
 FONT_FAM_MONO='monospace'
-TITLE="OMAHA RANGE CRUSHER"
+TITLE="Omaha Range Builder"
 MAIN_GEOMETRY="2200x2000"
 TEXT_OUTPUT_HEIGHT=60
 TEXT_OUTPUT_WIDTH=140

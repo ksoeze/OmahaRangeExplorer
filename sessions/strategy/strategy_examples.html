@@ -1,0 +1,1506 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>PLO Strategy Examples</title>
+<!-- 2017-05-26 Fre 00:51 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012  Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">PLO Strategy Examples</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">Ks3d3s</a></li>
+<li><a href="#sec-2">7s7d6s</a></li>
+<li><a href="#sec-3">QsQd7s</a></li>
+<li><a href="#sec-4">2d3sAs</a></li>
+<li><a href="#sec-5">2s4d8c</a></li>
+<li><a href="#sec-6">2s6dQc</a></li>
+<li><a href="#sec-7">2d9sKs</a></li>
+<li><a href="#sec-8">2sQsKd</a></li>
+<li><a href="#sec-9">3sTdJc</a></li>
+<li><a href="#sec-10">3sJsAd</a></li>
+<li><a href="#sec-11">4dTsKs</a></li>
+<li><a href="#sec-12">5s6dAc</a></li>
+<li><a href="#sec-13">5d7s9s</a></li>
+<li><a href="#sec-14">5s9sKd</a></li>
+<li><a href="#sec-15">7d8sJs</a></li>
+<li><a href="#sec-16">7sQsAs</a></li>
+<li><a href="#sec-17">7sKsAd</a></li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Ks3d3s</h2>
+<div class="outline-text-2" id="text-1">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Range</th>
+<th scope="col" class="right">3+,(AA,AK,KQ):ss,Ass</th>
+<th scope="col" class="right">AA,AK,KQ,KJ,ss,A:(88-AA)</th>
+<th scope="col" class="right">44-99 As,456,245,Add,Qdd</th>
+<th scope="col" class="right">*</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">$3b6</td>
+<td class="right">25</td>
+<td class="right">48</td>
+<td class="right">10</td>
+<td class="right">19</td>
+</tr>
+
+<tr>
+<td class="left">$3b10</td>
+<td class="right">24</td>
+<td class="right">47</td>
+<td class="right">11</td>
+<td class="right">19</td>
+</tr>
+
+<tr>
+<td class="left">$FI20</td>
+<td class="right">23</td>
+<td class="right">43</td>
+<td class="right">12</td>
+<td class="right">22</td>
+</tr>
+
+<tr>
+<td class="left">$FI50</td>
+<td class="right">20</td>
+<td class="right">35</td>
+<td class="right">16</td>
+<td class="right">30</td>
+</tr>
+
+<tr>
+<td class="left">75%</td>
+<td class="right">20</td>
+<td class="right">31</td>
+<td class="right">18</td>
+<td class="right">30</td>
+</tr>
+
+<tr>
+<td class="left">95%</td>
+<td class="right">21</td>
+<td class="right">29</td>
+<td class="right">18</td>
+<td class="right">32</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">7s7d6s</h2>
+<div class="outline-text-2" id="text-2">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Range</th>
+<th scope="col" class="right">7+,(AA,KK,QQ):(ss,45+),Ass:(88-JJ)</th>
+<th scope="col" class="right">AA,KK,ss,45+,A:(88-AA)</th>
+<th scope="col" class="right">44-99 As,Add:34+</th>
+<th scope="col" class="right">*</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">$3b6</td>
+<td class="right">29</td>
+<td class="right">47</td>
+<td class="right">13</td>
+<td class="right">10</td>
+</tr>
+
+<tr>
+<td class="left">$3b10</td>
+<td class="right">20</td>
+<td class="right">42</td>
+<td class="right">18</td>
+<td class="right">20</td>
+</tr>
+
+<tr>
+<td class="left">$FI20</td>
+<td class="right">25</td>
+<td class="right">43</td>
+<td class="right">15</td>
+<td class="right">17</td>
+</tr>
+
+<tr>
+<td class="left">$FI50</td>
+<td class="right">23</td>
+<td class="right">39</td>
+<td class="right">18</td>
+<td class="right">21</td>
+</tr>
+
+<tr>
+<td class="left">75%</td>
+<td class="right">21</td>
+<td class="right">38</td>
+<td class="right">21</td>
+<td class="right">20</td>
+</tr>
+
+<tr>
+<td class="left">95%</td>
+<td class="right">21</td>
+<td class="right">36</td>
+<td class="right">21</td>
+<td class="right">21</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">QsQd7s</h2>
+<div class="outline-text-2" id="text-3">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Range</th>
+<th scope="col" class="right">Q+,(AA,KK):ss,Ass:88-AA</th>
+<th scope="col" class="right">JJ-AA,ss</th>
+<th scope="col" class="right">88-TT,As,66</th>
+<th scope="col" class="right">*</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">$3b6</td>
+<td class="right">31</td>
+<td class="right">46</td>
+<td class="right">13</td>
+<td class="right">10</td>
+</tr>
+
+<tr>
+<td class="left">$3b10</td>
+<td class="right">31</td>
+<td class="right">40</td>
+<td class="right">14</td>
+<td class="right">16</td>
+</tr>
+
+<tr>
+<td class="left">$FI20</td>
+<td class="right">28</td>
+<td class="right">39</td>
+<td class="right">17</td>
+<td class="right">17</td>
+</tr>
+
+<tr>
+<td class="left">$FI50</td>
+<td class="right">23</td>
+<td class="right">30</td>
+<td class="right">20</td>
+<td class="right">29</td>
+</tr>
+
+<tr>
+<td class="left">75%</td>
+<td class="right">21</td>
+<td class="right">25</td>
+<td class="right">23</td>
+<td class="right">30</td>
+</tr>
+
+<tr>
+<td class="left">95%</td>
+<td class="right">19</td>
+<td class="right">23</td>
+<td class="right">24</td>
+<td class="right">34</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">2d3sAs</h2>
+<div class="outline-text-2" id="text-4">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Range</th>
+<th scope="col" class="right">A3+,Kss,A:(ss,A4+)</th>
+<th scope="col" class="right">A,ss,KK,QQ</th>
+<th scope="col" class="right">2+,44,55,24+</th>
+<th scope="col" class="right">*</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">$3b6</td>
+<td class="right">32</td>
+<td class="right">33</td>
+<td class="right">5</td>
+<td class="right">29</td>
+</tr>
+
+<tr>
+<td class="left">$3b10</td>
+<td class="right">37</td>
+<td class="right">34</td>
+<td class="right">3.5</td>
+<td class="right">26</td>
+</tr>
+
+<tr>
+<td class="left">$FI20</td>
+<td class="right">30</td>
+<td class="right">46</td>
+<td class="right">2</td>
+<td class="right">22</td>
+</tr>
+
+<tr>
+<td class="left">$FI50</td>
+<td class="right">30</td>
+<td class="right">32</td>
+<td class="right">12</td>
+<td class="right">27</td>
+</tr>
+
+<tr>
+<td class="left">75%</td>
+<td class="right">28</td>
+<td class="right">27</td>
+<td class="right">22</td>
+<td class="right">24</td>
+</tr>
+
+<tr>
+<td class="left">95%</td>
+<td class="right">27</td>
+<td class="right">24</td>
+<td class="right">29</td>
+<td class="right">20</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">2s4d8c</h2>
+<div class="outline-text-2" id="text-5">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Range</th>
+<th scope="col" class="right">84+,(AA,KK,8):(A3+),A35+</th>
+<th scope="col" class="right">35+,2+:(A3+),8+,JJ-AA</th>
+<th scope="col" class="right">2+,A3+</th>
+<th scope="col" class="right">*</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">$3b6</td>
+<td class="right">23</td>
+<td class="right">52</td>
+<td class="right">2</td>
+<td class="right">23</td>
+</tr>
+
+<tr>
+<td class="left">$3b10</td>
+<td class="right">17</td>
+<td class="right">43</td>
+<td class="right">12</td>
+<td class="right">19</td>
+</tr>
+
+<tr>
+<td class="left">$FI20</td>
+<td class="right">15</td>
+<td class="right">49</td>
+<td class="right">13</td>
+<td class="right">24</td>
+</tr>
+
+<tr>
+<td class="left">$FI50</td>
+<td class="right">18</td>
+<td class="right">39</td>
+<td class="right">22</td>
+<td class="right">21</td>
+</tr>
+
+<tr>
+<td class="left">75%</td>
+<td class="right">19</td>
+<td class="right">37</td>
+<td class="right">27</td>
+<td class="right">18</td>
+</tr>
+
+<tr>
+<td class="left">95%</td>
+<td class="right">19</td>
+<td class="right">37</td>
+<td class="right">28</td>
+<td class="right">16</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6">2s6dQc</h2>
+<div class="outline-text-2" id="text-6">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Range</th>
+<th scope="col" class="right">26+,AQ,(Q,KK,AA):34+,345</th>
+<th scope="col" class="right">Q,KK,AA</th>
+<th scope="col" class="right">34+,2+</th>
+<th scope="col" class="right">*</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">$3b6i</td>
+<td class="right">17</td>
+<td class="right">51</td>
+<td class="right">10</td>
+<td class="right">22</td>
+</tr>
+
+<tr>
+<td class="left">$3b10o</td>
+<td class="right">20</td>
+<td class="right">36</td>
+<td class="right">15</td>
+<td class="right">30</td>
+</tr>
+
+<tr>
+<td class="left">$FI20</td>
+<td class="right">23</td>
+<td class="right">30</td>
+<td class="right">12</td>
+<td class="right">36</td>
+</tr>
+
+<tr>
+<td class="left">$FI50</td>
+<td class="right">20</td>
+<td class="right">18</td>
+<td class="right">27</td>
+<td class="right">35</td>
+</tr>
+
+<tr>
+<td class="left">75%</td>
+<td class="right">20</td>
+<td class="right">15</td>
+<td class="right">33</td>
+<td class="right">32</td>
+</tr>
+
+<tr>
+<td class="left">95%</td>
+<td class="right">22</td>
+<td class="right">13</td>
+<td class="right">36</td>
+<td class="right">28</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7">2d9sKs</h2>
+<div class="outline-text-2" id="text-7">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Range</th>
+<th scope="col" class="right">K9+,(Ass,Qss):(JT+,AA,K),(AK,KK):dd</th>
+<th scope="col" class="right">K+,AA,ss</th>
+<th scope="col" class="right">JT+,As:(2+),9:dd</th>
+<th scope="col" class="right">*</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">$3b6i</td>
+<td class="right">28</td>
+<td class="right">47</td>
+<td class="right">15</td>
+<td class="right">11</td>
+</tr>
+
+<tr>
+<td class="left">$3b10o</td>
+<td class="right">27</td>
+<td class="right">38</td>
+<td class="right">19</td>
+<td class="right">17</td>
+</tr>
+
+<tr>
+<td class="left">$FI20</td>
+<td class="right">25</td>
+<td class="right">34</td>
+<td class="right">21</td>
+<td class="right">19</td>
+</tr>
+
+<tr>
+<td class="left">$FI50</td>
+<td class="right">16</td>
+<td class="right">33</td>
+<td class="right">20</td>
+<td class="right">30</td>
+</tr>
+
+<tr>
+<td class="left">75%</td>
+<td class="right">13</td>
+<td class="right">34</td>
+<td class="right">19</td>
+<td class="right">35</td>
+</tr>
+
+<tr>
+<td class="left">95%</td>
+<td class="right">12</td>
+<td class="right">34</td>
+<td class="right">17</td>
+<td class="right">37</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-sec-8" class="outline-2">
+<h2 id="sec-8">2sQsKd</h2>
+<div class="outline-text-2" id="text-8">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Range</th>
+<th scope="col" class="right">KQ+,Ass:(K,9T+),Kss,(AA,AK,JT+):ss</th>
+<th scope="col" class="right">Q+,ss,JT+</th>
+<th scope="col" class="right">9T+,2,Add</th>
+<th scope="col" class="right">*</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">$3b6i</td>
+<td class="right">30</td>
+<td class="right">31</td>
+<td class="right">20</td>
+<td class="right">20</td>
+</tr>
+
+<tr>
+<td class="left">$3b10o</td>
+<td class="right">31</td>
+<td class="right">38</td>
+<td class="right">13</td>
+<td class="right">18</td>
+</tr>
+
+<tr>
+<td class="left">$FI20</td>
+<td class="right">33</td>
+<td class="right">40</td>
+<td class="right">16</td>
+<td class="right">11</td>
+</tr>
+
+<tr>
+<td class="left">$FI50</td>
+<td class="right">21</td>
+<td class="right">44</td>
+<td class="right">17</td>
+<td class="right">18</td>
+</tr>
+
+<tr>
+<td class="left">75%</td>
+<td class="right">16</td>
+<td class="right">46</td>
+<td class="right">16</td>
+<td class="right">21</td>
+</tr>
+
+<tr>
+<td class="left">95%</td>
+<td class="right">15</td>
+<td class="right">44</td>
+<td class="right">20</td>
+<td class="right">22</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-sec-9" class="outline-2">
+<h2 id="sec-9">3sTdJc</h2>
+<div class="outline-text-2" id="text-9">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Range</th>
+<th scope="col" class="right">J3+,Q98+,9Q+:(AA,KK,J)</th>
+<th scope="col" class="right">AA,KK,QQ,J,T</th>
+<th scope="col" class="right">K9+</th>
+<th scope="col" class="right">*</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">$3b6i</td>
+<td class="right">22</td>
+<td class="right">62</td>
+<td class="right">8</td>
+<td class="right">8</td>
+</tr>
+
+<tr>
+<td class="left">$3b10o</td>
+<td class="right">25</td>
+<td class="right">50</td>
+<td class="right">13</td>
+<td class="right">12</td>
+</tr>
+
+<tr>
+<td class="left">$FI20</td>
+<td class="right">22</td>
+<td class="right">54</td>
+<td class="right">18</td>
+<td class="right">7</td>
+</tr>
+
+<tr>
+<td class="left">$FI50</td>
+<td class="right">18</td>
+<td class="right">41</td>
+<td class="right">22</td>
+<td class="right">20</td>
+</tr>
+
+<tr>
+<td class="left">75%</td>
+<td class="right">16</td>
+<td class="right">38</td>
+<td class="right">21</td>
+<td class="right">2</td>
+</tr>
+
+<tr>
+<td class="left">95%</td>
+<td class="right">15</td>
+<td class="right">36</td>
+<td class="right">20</td>
+<td class="right">28</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-sec-10" class="outline-2">
+<h2 id="sec-10">3sJsAd</h2>
+<div class="outline-text-2" id="text-10">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Range</th>
+<th scope="col" class="right">A3+,Ass,AK</th>
+<th scope="col" class="right">A,ss,245+</th>
+<th scope="col" class="right">Ks,24+</th>
+<th scope="col" class="right">*</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">$3b6</td>
+<td class="right">35</td>
+<td class="right">19</td>
+<td class="right">16</td>
+<td class="right">30</td>
+</tr>
+
+<tr>
+<td class="left">$3b10o</td>
+<td class="right">35</td>
+<td class="right">25</td>
+<td class="right">16</td>
+<td class="right">24</td>
+</tr>
+
+<tr>
+<td class="left">$FI20</td>
+<td class="right">38</td>
+<td class="right">24</td>
+<td class="right">18</td>
+<td class="right">20</td>
+</tr>
+
+<tr>
+<td class="left">$FI50</td>
+<td class="right">27</td>
+<td class="right">27</td>
+<td class="right">20</td>
+<td class="right">26</td>
+</tr>
+
+<tr>
+<td class="left">75%</td>
+<td class="right">20</td>
+<td class="right">25</td>
+<td class="right">22</td>
+<td class="right">32</td>
+</tr>
+
+<tr>
+<td class="left">95%</td>
+<td class="right">17</td>
+<td class="right">24</td>
+<td class="right">25</td>
+<td class="right">35</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-sec-11" class="outline-2">
+<h2 id="sec-11">4dTsKs</h2>
+<div class="outline-text-2" id="text-11">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Range</th>
+<th scope="col" class="right">KT+,Ass,(AA,K):(ss,QJ)</th>
+<th scope="col" class="right">AA,K,ss,QJ</th>
+<th scope="col" class="right">AJ+,T+</th>
+<th scope="col" class="right">*</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">$3b6</td>
+<td class="right">34</td>
+<td class="right">45</td>
+<td class="right">9</td>
+<td class="right">12</td>
+</tr>
+
+<tr>
+<td class="left">$3b10</td>
+<td class="right">32</td>
+<td class="right">45</td>
+<td class="right">14</td>
+<td class="right">8</td>
+</tr>
+
+<tr>
+<td class="left">$FI20</td>
+<td class="right">34</td>
+<td class="right">37</td>
+<td class="right">21</td>
+<td class="right">9</td>
+</tr>
+
+<tr>
+<td class="left">$FI50</td>
+<td class="right">25</td>
+<td class="right">33</td>
+<td class="right">21</td>
+<td class="right">20</td>
+</tr>
+
+<tr>
+<td class="left">75%</td>
+<td class="right">21</td>
+<td class="right">32</td>
+<td class="right">21</td>
+<td class="right">25</td>
+</tr>
+
+<tr>
+<td class="left">95%</td>
+<td class="right">19</td>
+<td class="right">32</td>
+<td class="right">19</td>
+<td class="right">30</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-sec-12" class="outline-2">
+<h2 id="sec-12">5s6dAc</h2>
+<div class="outline-text-2" id="text-12">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Range</th>
+<th scope="col" class="right">A5+,78+,A:(23+)</th>
+<th scope="col" class="right">A+,34+,KK</th>
+<th scope="col" class="right">23+,5+</th>
+<th scope="col" class="right">*</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">$3b6i</td>
+<td class="right">38</td>
+<td class="right">27</td>
+<td class="right">16</td>
+<td class="right">20</td>
+</tr>
+
+<tr>
+<td class="left">$3b10o</td>
+<td class="right">30</td>
+<td class="right">30</td>
+<td class="right">15</td>
+<td class="right">26</td>
+</tr>
+
+<tr>
+<td class="left">$FI20</td>
+<td class="right">28</td>
+<td class="right">35</td>
+<td class="right">15</td>
+<td class="right">22</td>
+</tr>
+
+<tr>
+<td class="left">$FI50</td>
+<td class="right">29</td>
+<td class="right">26</td>
+<td class="right">25</td>
+<td class="right">21</td>
+</tr>
+
+<tr>
+<td class="left">75%</td>
+<td class="right">25</td>
+<td class="right">25</td>
+<td class="right">31</td>
+<td class="right">18</td>
+</tr>
+
+<tr>
+<td class="left">95%</td>
+<td class="right">24</td>
+<td class="right">24</td>
+<td class="right">36</td>
+<td class="right">17</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-sec-13" class="outline-2">
+<h2 id="sec-13">5d7s9s</h2>
+<div class="outline-text-2" id="text-13">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Range</th>
+<th scope="col" class="right">55+,ss:(JT+,57+)</th>
+<th scope="col" class="right">57+,TT-AA:(76+),ss</th>
+<th scope="col" class="right">66,88,56+,As:5+</th>
+<th scope="col" class="right">*</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">$3b6</td>
+<td class="right">17</td>
+<td class="right">31</td>
+<td class="right">17</td>
+<td class="right">35</td>
+</tr>
+
+<tr>
+<td class="left">$3b10</td>
+<td class="right">19</td>
+<td class="right">33</td>
+<td class="right">19</td>
+<td class="right">30</td>
+</tr>
+
+<tr>
+<td class="left">$FI20</td>
+<td class="right">14</td>
+<td class="right">30</td>
+<td class="right">20</td>
+<td class="right">35</td>
+</tr>
+
+<tr>
+<td class="left">$FI50</td>
+<td class="right">19</td>
+<td class="right">28</td>
+<td class="right">24</td>
+<td class="right">28</td>
+</tr>
+
+<tr>
+<td class="left">75%</td>
+<td class="right">20</td>
+<td class="right">26</td>
+<td class="right">27</td>
+<td class="right">27</td>
+</tr>
+
+<tr>
+<td class="left">95%</td>
+<td class="right">19</td>
+<td class="right">25</td>
+<td class="right">30</td>
+<td class="right">27</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-sec-14" class="outline-2">
+<h2 id="sec-14">5s9sKd</h2>
+<div class="outline-text-2" id="text-14">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Range</th>
+<th scope="col" class="right">Ass,Kss,K9+,(AA,K):(JT+,ss)</th>
+<th scope="col" class="right">AA,K,ss,678+</th>
+<th scope="col" class="right">67+:s,As,5+</th>
+<th scope="col" class="right">*</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">$3b6</td>
+<td class="right">34</td>
+<td class="right">44</td>
+<td class="right">15</td>
+<td class="right">8</td>
+</tr>
+
+<tr>
+<td class="left">$3b10</td>
+<td class="right">29</td>
+<td class="right">44</td>
+<td class="right">18</td>
+<td class="right">10</td>
+</tr>
+
+<tr>
+<td class="left">$FI20</td>
+<td class="right">31</td>
+<td class="right">32</td>
+<td class="right">24</td>
+<td class="right">13</td>
+</tr>
+
+<tr>
+<td class="left">$FI50</td>
+<td class="right">24</td>
+<td class="right">27</td>
+<td class="right">33</td>
+<td class="right">16</td>
+</tr>
+
+<tr>
+<td class="left">75%</td>
+<td class="right">20</td>
+<td class="right">26</td>
+<td class="right">37</td>
+<td class="right">17</td>
+</tr>
+
+<tr>
+<td class="left">95%</td>
+<td class="right">17</td>
+<td class="right">26</td>
+<td class="right">38</td>
+<td class="right">19</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-sec-15" class="outline-2">
+<h2 id="sec-15">7d8sJs</h2>
+<div class="outline-text-2" id="text-15">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Range</th>
+<th scope="col" class="right">77+:(T,9,ss),(Ass,Kss,Qss):89+,78:ss</th>
+<th scope="col" class="right">78+,(Ass,Kss,Qss),AA,KK,J</th>
+<th scope="col" class="right">89+:s,ss,99,TT</th>
+<th scope="col" class="right">*</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">$3b6i</td>
+<td class="right">20</td>
+<td class="right">68</td>
+<td class="right">4</td>
+<td class="right">7</td>
+</tr>
+
+<tr>
+<td class="left">$3b10o</td>
+<td class="right">24</td>
+<td class="right">55</td>
+<td class="right">7</td>
+<td class="right">15</td>
+</tr>
+
+<tr>
+<td class="left">$FI20</td>
+<td class="right">20</td>
+<td class="right">52</td>
+<td class="right">9</td>
+<td class="right">19</td>
+</tr>
+
+<tr>
+<td class="left">$FI50</td>
+<td class="right">18</td>
+<td class="right">39</td>
+<td class="right">17</td>
+<td class="right">25</td>
+</tr>
+
+<tr>
+<td class="left">75%</td>
+<td class="right">16</td>
+<td class="right">35</td>
+<td class="right">22</td>
+<td class="right">27</td>
+</tr>
+
+<tr>
+<td class="left">95%</td>
+<td class="right">14</td>
+<td class="right">32</td>
+<td class="right">24</td>
+<td class="right">30</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-sec-16" class="outline-2">
+<h2 id="sec-16">7sQsAs</h2>
+<div class="outline-text-2" id="text-16">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Range</th>
+<th scope="col" class="right">77+:s,Kss,Jss</th>
+<th scope="col" class="right">ss,A7+,A:(JT+,K)</th>
+<th scope="col" class="right">Ks,Js,Ts,JT+:s</th>
+<th scope="col" class="right">*</th>
+<th scope="col" class="left">Kss vs Ks!AQ+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">$3b6</td>
+<td class="right">25</td>
+<td class="right">30</td>
+<td class="right">32</td>
+<td class="right">13</td>
+<td class="left">7 vs 5.7</td>
+</tr>
+
+<tr>
+<td class="left">$3b10</td>
+<td class="right">22</td>
+<td class="right">50</td>
+<td class="right">20</td>
+<td class="right">8</td>
+<td class="left">6 vs 5</td>
+</tr>
+
+<tr>
+<td class="left">$FI20</td>
+<td class="right">21</td>
+<td class="right">38</td>
+<td class="right">26</td>
+<td class="right">14</td>
+<td class="left">7 vs 6</td>
+</tr>
+
+<tr>
+<td class="left">$FI50</td>
+<td class="right">20</td>
+<td class="right">25</td>
+<td class="right">33</td>
+<td class="right">21</td>
+<td class="left">5 vs 4</td>
+</tr>
+
+<tr>
+<td class="left">75%</td>
+<td class="right">20</td>
+<td class="right">18</td>
+<td class="right">38</td>
+<td class="right">24</td>
+<td class="left">5 vs 4</td>
+</tr>
+
+<tr>
+<td class="left">95%</td>
+<td class="right">20</td>
+<td class="right">14</td>
+<td class="right">41</td>
+<td class="right">25</td>
+<td class="left">4.4 vs 3.7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-sec-17" class="outline-2">
+<h2 id="sec-17">7sKsAd</h2>
+<div class="outline-text-2" id="text-17">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+
+<col  class="right" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">Range</th>
+<th scope="col" class="right">A7+,Ass</th>
+<th scope="col" class="right">K+,ss</th>
+<th scope="col" class="right">JT+</th>
+<th scope="col" class="right">*</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">$3b6</td>
+<td class="right">41</td>
+<td class="right">22</td>
+<td class="right">23</td>
+<td class="right">13</td>
+</tr>
+
+<tr>
+<td class="left">$3b10</td>
+<td class="right">49</td>
+<td class="right">28</td>
+<td class="right">15</td>
+<td class="right">8</td>
+</tr>
+
+<tr>
+<td class="left">$FI20</td>
+<td class="right">41</td>
+<td class="right">34</td>
+<td class="right">18</td>
+<td class="right">6</td>
+</tr>
+
+<tr>
+<td class="left">$FI50</td>
+<td class="right">26</td>
+<td class="right">40</td>
+<td class="right">22</td>
+<td class="right">12</td>
+</tr>
+
+<tr>
+<td class="left">75%</td>
+<td class="right">19</td>
+<td class="right">41</td>
+<td class="right">22</td>
+<td class="right">18</td>
+</tr>
+
+<tr>
+<td class="left">95%</td>
+<td class="right">15</td>
+<td class="right">40</td>
+<td class="right">22</td>
+<td class="right">24</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Created: 2017-05-26 Fre 00:51</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.5.1 (<a href="http://orgmode.org">Org</a> mode 8.2.1)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

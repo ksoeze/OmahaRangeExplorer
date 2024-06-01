@@ -4,7 +4,7 @@
 # 
 # Filename: gui_elements.py
 # Description: 
-# Author: Johann Ertl
+# Author: Johann 
 # Maintainer: 
 # Created: Don Mar 17 10:51:40 2016 (+0100)
 # Version: 
@@ -369,8 +369,7 @@ def test():
     
 if __name__ == '__main__':
     import timeit
-    if DEBUG:
-        test()
+    test()
 
 # 
 # gui_elements.py ends here

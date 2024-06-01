@@ -3,7 +3,7 @@
 # 
 # Filename: main_gui.py
 # Description: 
-# Author: Johann Ertl
+# Author: Johann 
 # Maintainer: 
 # Created: Die Apr  5 14:16:51 2016 (+0200)
 # Version: 
@@ -379,7 +379,7 @@ def hero_ship_plot():
     plot.set_ylabel("Villain Fold Frequency")
 
     canvas=FigureCanvasTkAgg(figure, master=popup_window)
-    canvas.show()
+    canvas.draw()
     canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
     canvas._tkcanvas.pack(side=TOP, fill=BOTH, expand=1)
 
@@ -407,7 +407,7 @@ def villain_ship_plot():
     plot.set_ylabel("Villain Fold Frequency")
 
     canvas=FigureCanvasTkAgg(figure, master=popup_window)
-    canvas.show()
+    canvas.draw()
     canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
     canvas._tkcanvas.pack(side=TOP, fill=BOTH, expand=1)
 

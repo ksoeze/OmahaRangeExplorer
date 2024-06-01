@@ -3,7 +3,7 @@
 # 
 # Filename: ppt.py
 # Description: 
-# Author: Johann Ertl
+# Author: Johann 
 # Maintainer: 
 # Created: Die Mar 15 17:44:58 2016 (+0100)
 # Version: 
@@ -73,8 +73,9 @@ class OddsOracleServer():
         return
 
     def run_query(self, query):
+        trial = self.trial if "5" not in self.game else self.trial//4 # cut trials with 5card games
         try:
-            result = self.ppt_client.PPTServer.executePQL(query, self.trial, self.max_time, self.thread_cnt)
+            result = self.ppt_client.PPTServer.executePQL(query, trial, self.max_time, self.thread_cnt)
         except:
             logging.error("No Connection to PPT Server")
             return ""
