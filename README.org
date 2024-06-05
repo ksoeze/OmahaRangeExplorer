@@ -21,9 +21,9 @@ The equity calculations are done with the OddsOracle Desktop Software from ProPo
     - Fold Equity - Equity Graphs for better understanding of semibluffs
 ** Screenshots
 #+CAPTION: Main Interface
-[file:img/omaha-range-builder.png]
+[[.img/omaha-range-builder.png]]
 #+CAPTION: EV Calculation Interface
-[file:img/omaha-ev-calc.png]
+[[.img/omaha-ev-calc.png]]
 
 * Installation Guide
 ** Prerequisites
