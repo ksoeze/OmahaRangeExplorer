@@ -21,9 +21,9 @@ The equity calculations are done with the OddsOracle Desktop Software from ProPo
     - Fold Equity - Equity Graphs for better understanding of semibluffs
 ** Screenshots
 #+CAPTION: Main Interface
-[[.img/omaha-range-builder.png]]
+[[img/omaha-range-builder.png]]
 #+CAPTION: EV Calculation Interface
-[[.img/omaha-ev-calc.png]]
+[[img/omaha-ev-calc.png]]
 
 * Installation Guide
 ** Prerequisites
@@ -154,11 +154,11 @@ Ass,Kss,Qss,Jss
 
 Low Hands:
 
-Since I don’t really play HILO much, only made low syntax is supported with <
-
 So, A6< on 3h5h7h results in:
 A2,A4,24,A6
-Unfortunately, there is no support for low draws.
+
+And, A6< on 3h5hKh results in:
+A2,A4,24,A6
 
 ** EV Calcs
 
