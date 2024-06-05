@@ -1,4 +1,3 @@
-#+TITLE: Omaha Range Explorer
 #+AUTHOR: [Johann]
 #+DATE: [2024-05-29 Mi]
 #+OPTIONS: toc:t
@@ -22,9 +21,9 @@ The equity calculations are done with the OddsOracle Desktop Software from ProPo
     - Fold Equity - Equity Graphs for better understanding of semibluffs
 ** Screenshots
 #+CAPTION: Main Interface
-[[file:img/omaha-range-builder.png][Main Interface - Range Builder]]
+[file:img/omaha-range-builder.png]
 #+CAPTION: EV Calculation Interface
-[[file:img/omaha-ev-calc.png][EV Calc 2way 3way vs4bet]]
+[file:img/omaha-ev-calc.png]
 
 * Installation Guide
 ** Prerequisites
