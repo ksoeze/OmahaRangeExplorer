@@ -20,7 +20,7 @@ INVALID_CHAR='#'
 
 # developement constants
 
-DEBUG = True
+DEBUG = False
 #MACRO_FILE_LOCATION="/home/johann/Documents/poker/oddsOracleMacros.csv"
 MACRO_FILE_LOCATION="./oddsOracleMacros.csv"
 

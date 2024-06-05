@@ -59,7 +59,7 @@ You should see the output:
 ** Installation Steps
 
 1. Download the Repository:
-   - Go to the [[https://github.com/ksoeze/OmahaRangeCrusher][OmahaRangeExplorer GitHub page]].
+   - Clone the repository or go to the [[https://github.com/ksoeze/OmahaRangeExplorer][OmahaRangeExplorer GitHub page]].
    - Click the green "Code" button and select "Download ZIP".
    - Extract the ZIP file to a folder on your computer.
 
